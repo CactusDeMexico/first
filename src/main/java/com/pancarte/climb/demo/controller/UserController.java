@@ -72,7 +72,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
 
-        model.addObject("userName", user.getFirstname() + " " + user.getLastname());
+        model.addObject("userName", user.getName() + " " + user.getLastname());
         model.setViewName("home/home");
         return model;
     }
@@ -83,4 +83,5 @@ public class UserController {
         model.setViewName("errors/access_denied");
         return model;
     }
+
 }

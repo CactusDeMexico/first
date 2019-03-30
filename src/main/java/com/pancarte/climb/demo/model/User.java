@@ -4,20 +4,21 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name ="user")
+@Table(name ="user1", schema = "public")
 public class User {
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private  int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "iduser")
+    private int id;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "firstname")
-    private String firstname;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "lastname")
     private String lastname;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
@@ -26,7 +27,7 @@ public class User {
     private int active;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name ="user_role",joinColumns = @JoinColumn(name="user_id"),inverseJoinColumns = @JoinColumn(name =" role_id"))
+   @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = " role_id"))
     private Set<Role> roles;
 
     public int getId() {
@@ -37,20 +38,12 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLastname() {
@@ -59,6 +52,14 @@ public class User {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

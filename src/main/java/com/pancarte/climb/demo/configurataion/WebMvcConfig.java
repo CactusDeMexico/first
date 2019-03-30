@@ -15,5 +15,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }
-
+//todo:jeu de donnée pour la base
+    //todo:aficher e jeu de donnée
+    //todo:inscrire un topo
+    //todo:
 }
