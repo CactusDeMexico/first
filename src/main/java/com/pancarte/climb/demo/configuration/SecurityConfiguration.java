@@ -1,4 +1,4 @@
-package com.pancarte.climb.demo.configurataion;
+package com.pancarte.climb.demo.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,6 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.persistence.Table;
 import javax.sql.DataSource;
 
 @Configuration
@@ -27,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     private DataSource dataSource;
 
     private final String USERS_QUERY = "select email, password, active from user1 where email=?";
-    private final String ROLES_QUERY = "select u.email, r.role from user1 u inner join user_role ur on (u.iduser = ur.user_id) inner join role r on (ur.role_id=r.role_id) where u.email=?";
+    private final String ROLES_QUERY = "select u.email, r.role from user1 u inner join user_role ur on (u.iduser = ur.iduser) inner join role r on (ur.idrole=r.idrole) where u.email=?";
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,10 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/topo").permitAll()
-                .antMatchers("/home/**").hasAuthority("ADMIN").anyRequest()
+                .antMatchers("/home").permitAll()
+                .antMatchers("/home/loggedhome").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable()
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/home/home")
+                .defaultSuccessUrl("/home/loggedhome")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()

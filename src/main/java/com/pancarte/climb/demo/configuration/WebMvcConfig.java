@@ -1,11 +1,9 @@
-package com.pancarte.climb.demo.configurataion;
+package com.pancarte.climb.demo.configuration;
 
-import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.*;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {

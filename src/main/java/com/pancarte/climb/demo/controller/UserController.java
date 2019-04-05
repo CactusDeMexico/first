@@ -21,6 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @RequestMapping(value= {"/", "/topo"}, method=RequestMethod.GET)
     public  ModelAndView accueil() {
         ModelAndView model = new ModelAndView();
@@ -67,13 +68,20 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value= {"/home/home"}, method=RequestMethod.GET)
-    public ModelAndView home() {
+    @RequestMapping(value= {"/home/loggedhome"}, method=RequestMethod.GET)
+    public ModelAndView loggedHome() {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
 
         model.addObject("userName", user.getName() + " " + user.getLastname());
+        model.setViewName("home/loggedHome");
+        return model;
+    }
+
+    @RequestMapping(value= {"/home/home"}, method=RequestMethod.GET)
+    public ModelAndView home() {
+        ModelAndView model = new ModelAndView();
         model.setViewName("home/home");
         return model;
     }
