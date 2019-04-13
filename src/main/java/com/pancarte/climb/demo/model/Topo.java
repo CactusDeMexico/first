@@ -15,12 +15,7 @@ public class Topo {
     @Column(name = "idtopo")
     private int idtopo;
 
-    @Column(name = "idpublication")
-    private int idpublication;
-
     @Column(name = "lieu")
     private String lieu;
 
-    @Column(name = "idspot")
-    private int idspot;
 }

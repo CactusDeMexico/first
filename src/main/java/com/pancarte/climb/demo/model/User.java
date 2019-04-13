@@ -1,5 +1,6 @@
 package com.pancarte.climb.demo.model;
 
+
 import lombok.Getter;
 import lombok.Setter;
 

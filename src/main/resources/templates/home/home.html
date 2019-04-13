@@ -8,10 +8,25 @@
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
 </head>
+
 <body>
+<div th:replace="~{fragment/header :: header}">Header</div>
+<div th:replace="~{fragment/carrousel :: carrousel}">Carrousel</div>
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3">Dernier site!home </h1>
+        <p>This is a template for a simple marketing or informational website. It includes a large callout called a
+            jumbotron and three supporting pieces of content. Use it as a starting point to create something more
+            unique.</p>
+        <p><a class="btn btn-success btn-lg" href="#" role="button">Learn more »</a></p>
+    </div>
+</div>
+
 <div class="container">
-    <h2>Hi <span th:utext="${userName}"></span>, this is the home page.</h2>
+ <!--   <h2>Hi <span th:utext="${userName}"></span>, this is the home page.</h2>
     <a th:href="@{/logout}">Sign out</a>
+    -->
 </div>
 </body>
 </html>

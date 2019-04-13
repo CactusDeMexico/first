@@ -36,11 +36,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
-
+//todo: directory admin and .has autority "amdin/**"
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/test").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/topo").permitAll()
