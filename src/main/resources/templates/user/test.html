@@ -116,13 +116,13 @@
 
         <div class="row">
 
-            <div class="col-md-4" th:each="spots, stat : ${spot}" >
-                <td th:text="${topos.getIdtopo()}"></td>
-                <td th:text="${spots.getIdtopo()}"></td>
-                <span th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">No resources found.</span>
+            <div class="col-md-4" th:each="spots, stat : ${spot}"th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
+
 
                 <!--
-
+<td th:text="${topos.getIdtopo()}"></td>
+                <td th:text="${spots.getIdtopo()}"></td>
+                <span th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">No resources found.</span>
                 <span th:unless="${spots.getIdTopo() == topos.getIdTopo()}">Male</span>-->
                         <!--<tr th:switch="${spots.getIdTopo}"></tr>
                         th:if="${spots.getIdTopo() == topos.getIdTopo()}"
