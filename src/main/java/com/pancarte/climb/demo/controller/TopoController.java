@@ -25,7 +25,8 @@ public class TopoController {
 
         List<Topo> topos = topoService.findAllTopo();
         List<Spot> spots = spotService.findAllSpot();
-
+        String lastSpotDescription = "";
+        String lastSpotName="";
         for (Topo topo : topos) {
 
             System.out.println(topo.getIdtopo()+" TOPO "+topo.getLieu());
@@ -35,15 +36,21 @@ public class TopoController {
                     System.out.println(" le nom du spot " + spot.getNom());
                     System.out.println("DESCRIPTION " + spot.getDescription());
                     System.out.println(spot.getIdtopo());
+                    System.out.println(spots.size()+" LA TAILLE");
+                    lastSpotName=spot.getNom();
+                    lastSpotDescription = spot.getDescription();
                 }
 
             }
         }
         System.out.println("END");
+        //System.out.println(+spots.get(2)+" le dernier");
 
 
         model.addObject("spot", spots);
         model.addObject("topo", topos);
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
         //model.addObject("test",spots);
         model.setViewName("user/test");
         return model;
