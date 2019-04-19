@@ -55,4 +55,29 @@ public class TopoController {
         model.setViewName("user/test");
         return model;
     }
+    @RequestMapping(value= {"/home"}, method=RequestMethod.GET)
+    public ModelAndView home() {
+        ModelAndView model = new ModelAndView();
+        List<Topo> topos = topoService.findAllTopo();
+        List<Spot> spots = spotService.findAllSpot();
+
+        String lastSpotDescription = "";
+        String lastSpotName="";
+        for (Topo topo : topos) {
+            for ( Spot spot : spots) {
+                if(topo.getIdtopo() == spot.getIdtopo()) {
+                    lastSpotName=spot.getNom();
+                    lastSpotDescription = spot.getDescription();
+                }
+            }
+        }
+        model.addObject("spot", spots);
+        model.addObject("topo", topos);
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
+        //model.addObject("test",spots);
+        model.setViewName("home/home");
+        return model;
+    }
+
 }

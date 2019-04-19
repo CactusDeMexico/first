@@ -68,7 +68,7 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value= {"/home/loggedhome"}, method=RequestMethod.GET)
+    @RequestMapping(value= {"/loggedhome"}, method=RequestMethod.GET)
     public ModelAndView loggedHome() {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -79,12 +79,7 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value= {"/home/home"}, method=RequestMethod.GET)
-    public ModelAndView home() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("home/home");
-        return model;
-    }
+
 
     @RequestMapping(value= {"/access_denied"}, method=RequestMethod.GET)
     public ModelAndView accessDenied() {
