@@ -1,10 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Accueil</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
+    <style></style>
+    <style type="text/css">/* Chart.js */
+    @-webkit-keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    @keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    .chartjs-render-monitor {
+        -webkit-animation: chartjs-render-animation 0.001s;
+        animation: chartjs-render-animation 0.001s;
+    }</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .carousel2 {
+            height: 60vh;
+        }
+
+        .item2 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            min-height: 300px;
+        }
+    </style>
+    <!-- Custom styles for this template -->
+    <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
 </head>
 <body>
 
+<div th:replace="~{fragment/header :: header}">Header</div>
+<main role="main">
+
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3">Inscription de topo </h1>
+            <p>This is a template for a simple marketing or informational website. It includes a large callout called a
+                jumbotron and three supporting pieces of content. Use it as a starting point to create something more
+                unique.</p>
+        </div>
+    </div>
+    <div class="container">
+        <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" >
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <div class="alert alert-success" role="alert">
+                    </div>
+                </div>
+            </div>
+
+
+            <!--________________________INSERTION lien_______________________________-->
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="file">image du topo</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="file" name="file"   id="file"/>
+                            <input type="submit" value="Upload" />
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-control-feedback">
+                         <span class="text-danger align-middle"
+                         >
+                         </span>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION secteur_______________________________-->
+            <!--________________________INSERTION idspot_______________________________-->
+            <!--________________________INSERTION idpublication= idpublication_______________________________-->
+            <!--________________________INSERTION nom_______________________________-->
+
+
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-success"  ><i class="fa fa-user-plus"></i> <!--<a th:href="@{/login}">Register</a> -->Register</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</main>
+
+
+
+
+
 </body>
+<div th:replace="~{fragment/footer :: footer}">Footer</div>
+<!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster
+<script src="../../static/assets/js/jquery.min.js"></script>
+<script src="../../static/assets/js/popper.js"></script>
+<script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+-->
 </html>

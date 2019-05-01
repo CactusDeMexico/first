@@ -3,21 +3,30 @@ package com.pancarte.climb.demo.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+@Entity
 @Getter
 @Setter
+@Table(name ="voie")
 public class Way {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "idpublication")
-    private int idpublication;
+    @Column(name = "idvoie")
+    private int idvoie;
 
-    @Column(name = "cotation")
-    private String cotation;
+    @Column(name = "idsecteur")
+    private int idsecteur;
+
+    @Column(name = "nom")
+    private String nom;
+
+    @Column(name = "equipees")
+    private boolean equipees;
 
     @Column(name = "relai")
     private String relai;
+
+    @Column(name = "cotation")
+    private String cotation;
 }

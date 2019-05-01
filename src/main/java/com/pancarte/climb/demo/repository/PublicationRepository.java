@@ -1,0 +1,18 @@
+package com.pancarte.climb.demo.repository;
+
+import com.pancarte.climb.demo.model.Publication;
+import com.pancarte.climb.demo.model.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository("publicationRepository")
+public interface PublicationRepository extends JpaRepository<Publication, Integer> {
+    @Query(value = "SELECT * FROM publication u WHERE u.publication > 0",nativeQuery = true)
+    List<Publication> findAllPublication();
+
+    @Query(value = "SELECT idpublication FROM publication ORDER BY idpublication DESC LIMIT 1;",nativeQuery = true)
+    int selectLastIdPublication();
+}

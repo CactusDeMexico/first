@@ -15,4 +15,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query(value = "SELECT * FROM spot u WHERE u.idspot > 0",nativeQuery = true)
     List<Spot> findAllSpot();
+
+    @Query(value = "SELECT idspot FROM spot ORDER BY idspot DESC LIMIT 1;",nativeQuery = true)
+    int selectLastIdspot();
 }

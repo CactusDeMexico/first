@@ -36,7 +36,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .dataSource(dataSource)
                 .passwordEncoder(bCryptPasswordEncoder);
     }
-//todo: directory admin and .has autority "amdin/**"
+
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
@@ -46,10 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/topo").permitAll()
                 .antMatchers("/home").permitAll()
-                .antMatchers("/home/loggedhome").hasAuthority("ADMIN").anyRequest()
+                .antMatchers("/loggedhome","/test").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable()
+
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/home/loggedhome")
+                .defaultSuccessUrl("/loggedhome")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()
