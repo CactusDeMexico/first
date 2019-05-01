@@ -1,32 +1,194 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Home</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Accueil</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
+    <!-- include css in the header -->
+    <link rel="stylesheet" type="text/css"   th:href="@{/css/jumbotron.css}"/>
+
+    <style></style>
+    <style type="text/css">/* Chart.js */
+    @-webkit-keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    @keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style>
+        .carousel2 {
+            height: 60vh;
+        }
+
+
+    </style>
+    <!-- Custom styles for this template -->
+    <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
 </head>
+
 
 <body>
 <div th:replace="~{fragment/header :: header}">Header</div>
-<div th:replace="~{fragment/carrousel :: carrousel}">Carrousel</div>
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-    <div class="container">
-        <h1 class="display-3">Dernier site!home </h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a
-            jumbotron and three supporting pieces of content. Use it as a starting point to create something more
-            unique.</p>
-        <p><a class="btn btn-success btn-lg" href="#" role="button">Learn more »</a></p>
-    </div>
-</div>
+<main role="main">
+    <!-- carousel-->
+    <div th:replace="~{fragment/carrousel :: carrousel}">carrousel</div>
 
-<div class="container">
- <!--   <h2>Hi <span th:utext="${userName}"></span>, this is the home page.</h2>
-    <a th:href="@{/logout}">Sign out</a>
-    -->
-</div>
-</body>
+    </div>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+        <div class="container">
+            <h1 class="display-3"> Nouveau! <td th:text="${lastSpotName}"></h1>
+            <p><td th:text="${lastSpotDescription}"></p>
+            <p><a class="btn btn-success btn-lg" href="#" role="button">Learn more »</a></p>
+
+        </div>
+
+
+    </div>
+
+    <!-- _________________________DEBUT TOPO________________________ -->
+    <tr th:each="topos, stat : ${topo}">
+        <div class="container">
+
+            <h1><td th:text="${topos.getLieu()}"></td></h1>
+            <!--_________________________ DEBUT SPOT_______________________ -->
+
+            <div class="row">
+
+                <div class="col-md-4" th:each="spots, stat : ${spot}"th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
+
+
+                    <!--
+    <td th:text="${topos.getIdtopo()}"></td>
+                    <td th:text="${spots.getIdtopo()}"></td>
+                    <span th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">No resources found.</span>
+                    <span th:unless="${spots.getIdTopo() == topos.getIdTopo()}">Male</span>-->
+                    <!--<tr th:switch="${spots.getIdTopo}"></tr>
+                    th:if="${spots.getIdTopo() == topos.getIdTopo()}"
+                    -->
+                    <!-- <td th:if="${spots.getIdtopo()} == 1">will be rendered</td>
+                     <td th:unless="${spots.getIdtopo()} != 1">will be rendered 2</td> -->
+                    <div  class="card" style="width: 18rem;" >
+
+                        <!-- Image Spot
+
+                        <img src="https://www.telegraph.co.uk/content/dam/Travel/ski/K2-mountain-Andrzej-Bargiel-first-ski-descent-by-Piotr-Pawlus-Red-Bull-Content-Pool.jpg?imwidth=1400"
+                             class="card-img-top" alt="..." height="200px">
+
+                        <img th:src="@{/img/gros_piton.jpg}"
+                             class="card-img-top" alt="test 2" height="200px">
+
+ <img th:src="@{static/img/gros_piton.jpg}"
+                             class="card-img-top" alt="test 3" height="200px">
+
+                        <img src="static/img/gros_piton.jpg"
+  class="card-img-top" alt="sans th" height="200px">
+
+    <img th:src="@{/img/soufriere.jpg}" alt="memorynotfound logo">
+
+                        <img th:src="@{'/picture/'+'${spots.getLien()}'}"
+                             class="card-img-top" alt="test 1" height="200px">
+
+                        <img th:src="@{/img/soufriere.jpg}"
+                             class="card-img-top" alt="/gros_piton.jpg" height="200px">
+
+                        <img th:src="@{/img/stlucie.png}"
+                             class="card-img-top" alt="/gros_piton.jpg" height="200px">
+
+
+
+ <img th:src="@{/img/logo.png}"  class="card-img-top"  alt="memorynotfound logo"  height="200px" >
+
+                        <img th:src="@{/img/stlucie.png}"
+                             class="card-img-top" alt="/gros_piton.jpg" height="200px">
+
+                            <img th:src="@{/img/logo.png}"  class="card-img-top"  alt="memorynotfound logo"  height="200px" >
+                        <img th:src="@{/img/leaf.jpg}"  class="card-img-top"  alt="xx logo"  height="200px" >
+                        <img th:src="@{/img/gros_piton.jpg}"
+                             class="card-img-top" alt="@{/img/gros_piton.jpg}" height="200px">
+                             <img th:src="@{'/img/' + 'logo.png'}"
+                             class="card-img-top" alt="test 2" height="200px">
+                        <img th:src="@{/img/tleaf.png}"
+                             class="card-img-top" alt="tleaf.png" height="200px">
+
+                        <img src="C:\Users\vivi\Desktop\x1\COURS\BTS\Java\first\src\main\resources\static\img\soufriere.jpg"
+                             class="card-img-top" alt="test 3" height="200px">
+                         -->
+                        <img th:src="@{/img/__${spots.getLien()}__}"
+                             class="card-img-top" alt="test 1" height="200px">
+
+
+
+                        <img src="https://www.telegraph.co.uk/content/dam/Travel/ski/K2-mountain-Andrzej-Bargiel-first-ski-descent-by-Piotr-Pawlus-Red-Bull-Content-Pool.jpg?imwidth=1400"
+                             class="card-img-top" alt="test 4" height="200px">
+                        <div class="card-body">
+                            <!-- Nom Sport -->
+                            <h5 class="card-title"><td th:text="${spots.getNom()}"></td></h5>
+                            <p class="card-text">
+                            <td th:text="${spots.getDescription()}"></td>
+                            <!-- <td th:text="${topos.getIdtopo()}"></td>
+                             <td th:text="${spot.getIdtopo()}"></td>-->
+                            </p>
+                            <a href="#" class="btn btn-success">Go somewhere</a>
+
+                        </div>
+                    </div>
+
+
+                    <!-- _______________________FIN SPOT_________________________ -->
+                </div>
+
+
+
+            </div>
+
+
+            <hr>
+
+        </div>
+        <!--______________ FIN TOPO _____________________________-->
+    </tr>
+
+</main>
+
+
+<!-- Footer -->
+
+</body><div th:replace="~{fragment/footer ::footer}">footer</div>
+<!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/popper.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+
 </html>
