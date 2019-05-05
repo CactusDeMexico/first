@@ -141,14 +141,13 @@
 
                         <img src="C:\Users\vivi\Desktop\x1\COURS\BTS\Java\first\src\main\resources\static\img\soufriere.jpg"
                              class="card-img-top" alt="test 3" height="200px">
+                              <img th:src="@{/img/leaf.png}" alt="work logo"/>
+                        <img th:src="@{/img/logo.png}" alt="work logo"/>
+                        <img th:src="@{/img/stlucie.png}" alt="work logo"/>
+                        <img th:src="@{/static/img/stlucie.png}" alt="work logo"/>
                          -->
-                        <img th:src="@{/img/__${spots.getLien()}__}"
+                        <img src="#" th:src="@{/img/__${spots.getLien()}__}"
                              class="card-img-top" alt="test 1" height="200px">
-
-
-
-                        <img src="https://www.telegraph.co.uk/content/dam/Travel/ski/K2-mountain-Andrzej-Bargiel-first-ski-descent-by-Piotr-Pawlus-Red-Bull-Content-Pool.jpg?imwidth=1400"
-                             class="card-img-top" alt="test 4" height="200px">
                         <div class="card-body">
                             <!-- Nom Sport -->
                             <h5 class="card-title"><td th:text="${spots.getNom()}"></td></h5>
@@ -181,14 +180,15 @@
 
 
 <!-- Footer -->
-
+<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 </body><div th:replace="~{fragment/footer ::footer}">footer</div>
 <!-- /container -->
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script th:src="@{/assets/js/jquery.min.js}"></script>
-<script th:src="@{/assets/js/popper.js}"></script>
-<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<!-- include javascript in the footer -->
+
+<script type="text/javascript" th:src="@{/js/lib.js}"></script>
 
 </html>
