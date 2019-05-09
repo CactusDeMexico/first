@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +8,8 @@
     <meta name="author" content="">
     <title>Jumbotron Template for Bootstrap</title>
     <!-- Bootstrap core CSS -->
+    <link th:href="@{bootstrap/css/bootstrap.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css"   th:href="@{/css/jumbotron.css}"/>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
           id="bootstrap-css">
@@ -74,7 +76,7 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" th:href="@{/test}"> Page test</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link disabled" href="#">Disabled</a>
@@ -102,9 +104,10 @@
 
 </body>
 <!-- Placed at the end of the document so the pages load faster -->
-<script th:src="@{/assets/js/jquery.min.js}"></script>
-<script th:src="@{/assets/js/popper.js}"></script>
-<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:href="@{bootstrap/js/bootstrap.js}"></script>
+<script th:href="@{bootstrap/css/jumbotron}"></script>
+<script th:href="@{js/assets/js/popper.js}"></script>
+<script th:href="@{/assets/js/bootstrap.min.js}"></script>
 
 </html>
 

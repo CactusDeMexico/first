@@ -15,9 +15,13 @@ public class TopoServiceImpl implements TopoService {
 
     @Autowired
     private TopoRepository topoRepository;
+    @Autowired
     private PublicationRepository publicationRepository;
+    @Autowired
     private SpotRepository spotRepository;
+    @Autowired
     private SecteurRepository secteurRepository;
+    @Autowired
     private WayRepository wayRepository;
 
     @Override
@@ -26,32 +30,33 @@ public class TopoServiceImpl implements TopoService {
         return topoRepository.findAllTopo();
     }
 
-    //@Override
-    public void savePublication(Publication publication, Topo topo, Spot spot, Secteur secteur, Way way, int IdUser) {
+    @Override
+    public void savePublication(Publication publication, Topo topo, Spot spot, Secteur secteur, Way way, int IdUser,String imgSpot,String imgSecteur) {
         publication.setIduser(IdUser);
         //INSERTION PUBLICATION ____________________________________
         Date now = java.sql.Date.valueOf(LocalDate.now());
         publication.setCreationdate(now);
         publication.setUpdatedate(now);
+        System.out.println("PUBLICATION "+publication.getName()+" "+publication.getIduser()+" "+publication.getCreationdate()+" "+publication.getUpdatedate());
         publicationRepository.save(publication);
+        System.out.println("topo "+topo.getLieuTopo());
         //INSERTION TOPO ____________________________________
         topoRepository.save(topo);
         //INSERTION spot
         spot.setIdtopo(topoRepository.selectLastIdTopo());
         spot.setIdpublication(publicationRepository.selectLastIdPublication());
-
+        spot.setLienSpot(imgSpot);
+        System.out.println("spot "+spot.getIdtopo()+spot.getIdpublication()+spot.getNomSpot()+spot.getDescription()+spot.getLienSpot());
         spotRepository.save(spot);
+
+        secteur.setLien(imgSecteur);
         secteur.setIdspot(spotRepository.selectLastIdspot());
         secteur.setIdpublication(publicationRepository.selectLastIdPublication());
+        System.out.println("SECTEUR "+secteur.getIdspot()+secteur.getIdpublication()+secteur.getNomSecteur()+secteur.getType()+secteur.getLien()+secteur.getHauteur());
         secteurRepository.save(secteur);
+
         way.setIdsecteur(secteurRepository.selectLastIdSecteur());
+        System.out.println("VOIE "+way.getIdsecteur()+way.getNomWay()+way.isEquipees()+way.getRelai()+way.getCotation());
         wayRepository.save(way);
-        //publication
-        //topo
-        //spot
-        //secteur
-        //voie
-        //propriétaire
-        //rent
     }
 }

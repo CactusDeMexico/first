@@ -22,13 +22,13 @@ public class Spot {
     private int idpublication;
 
     @Column(name = "nom")
-    private String nom;
+    private String nomSpot;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "lien")
-    private String lien;
+    private String lienSpot;
 
 
 }

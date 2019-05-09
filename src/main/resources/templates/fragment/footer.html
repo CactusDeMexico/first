@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,12 +8,11 @@
     <meta name="author" content="">
     <title>Jumbotron Template for Bootstrap</title>
     <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
-          id="bootstrap-css">
-
+    <link rel="stylesheet" type="text/css"   th:href="@{/css/jumbotron.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
-    <link rel="stylesheet" type="text/css"   th:href="@{/css/jumbotron.css}"/>
+
     <link href="https://fortawesome.github.io/Font-Awesome/assets/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
@@ -179,10 +178,9 @@
 <!-- Copyright -->
 
 <!-- Placed at the end of the document so the pages load faster -->
-<script th:href="@{/assets/js/jquery.min.js}"></script>
-<script th:href="@{/assets/js/popper.js}"></script>
+<script th:href="@{bootstrap/js/bootstrap.js}"></script>
+<script th:href="@{bootstrap/css/jumbotron}"></script>
+<script th:href="@{js/assets/js/popper.js}"></script>
 <script th:href="@{/assets/js/bootstrap.min.js}"></script>
-
-
 
 </html>

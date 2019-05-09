@@ -19,7 +19,7 @@ public class Way {
     private int idsecteur;
 
     @Column(name = "nom")
-    private String nom;
+    private String nomWay;
 
     @Column(name = "equipees")
     private boolean equipees;

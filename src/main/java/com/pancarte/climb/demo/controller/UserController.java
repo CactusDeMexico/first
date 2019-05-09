@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.persistence.Table;
 import javax.validation.Valid;
 
 @Controller
@@ -22,7 +21,7 @@ public class UserController {
     private UserService userService;
 
 
-    @RequestMapping(value= {"/", "/topo"}, method=RequestMethod.GET)
+    @RequestMapping(value= {"/topo"}, method=RequestMethod.GET)
     public  ModelAndView accueil() {
         ModelAndView model = new ModelAndView();
 
@@ -30,7 +29,7 @@ public class UserController {
         return model;
     }
 
-    @RequestMapping(value= {"/", "/login"}, method=RequestMethod.GET)
+    @RequestMapping(value= {"/login"}, method=RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView model = new ModelAndView();
 
@@ -85,6 +84,12 @@ public class UserController {
     public ModelAndView accessDenied() {
         ModelAndView model = new ModelAndView();
         model.setViewName("errors/access_denied");
+        return model;
+    }
+    @RequestMapping(value= {"/error"}, method=RequestMethod.GET)
+    public ModelAndView error() {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("errors/error");
         return model;
     }
 

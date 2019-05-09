@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,59 +9,20 @@
     <title>Accueil</title>
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
-          id="bootstrap-css">
+          id="bootstrap-css"> <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
-    <style></style>
-    <style type="text/css">/* Chart.js */
-    @-webkit-keyframes chartjs-render-animation {
-        from {
-            opacity: 0.99
-        }
-        to {
-            opacity: 1
-        }
-    }
-
-    @keyframes chartjs-render-animation {
-        from {
-            opacity: 0.99
-        }
-        to {
-            opacity: 1
-        }
-    }
-
-    .chartjs-render-monitor {
-        -webkit-animation: chartjs-render-animation 0.001s;
-        animation: chartjs-render-animation 0.001s;
-    }</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .carousel2 {
-            height: 60vh;
-        }
 
-        .item2 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            min-height: 300px;
-        }
-    </style>
     <!-- Custom styles for this template -->
     <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
 </head>
 <body>
 
-<div th:replace="~{fragment/header :: header}">Header</div>
+<div th:replace="~{fragment/loggedHeader :: loggedHeader}">HEADER</div>
 <main role="main">
-
     <div class="jumbotron">
         <div class="container">
             <h1 class="display-3">Inscription de topo </h1>
@@ -80,53 +41,291 @@
                 </div>
             </div>
 
-
-            <!--________________________INSERTION lien_______________________________-->
-            <div class="row">
+            <!--_______________________Nom plublication________________________________-->
+            <div class="row" th:object="${publication}">
                 <div class="col-md-3 field-label-responsive">
-                    <label for="file">image du topo</label>
+                    <label for="nomPublication">Nom de publication</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="text"  th:field="*{name}" class="form-control" id="nomPublication"
+                                   placeholder="nom pour la publication" required autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--_______________________iduser plublication________________________________-->
+            <!--_______________________creationdate plublication________________________________-->
+            <!--_______________________creationdate plublication________________________________-->
+
+            <!--_____________________________création du topo TOPO__________________________-->
+            <div class="row" th:object="${topo}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="lieuTopo">Ajouter un lieu </label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
+                            <input type="text"  th:field="*{lieuTopo}"name="lieuTopo" list="lieuTopo" class=" custom-select">
+
+                            <datalist  id="lieuTopo" >
+                                <div th:each="topos, stat : ${topos}">
+                                    <option th:value="${topo.getLieuTopo()}">
+                                </div>
+                            </datalist>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION DANS SPOT_______________________________-->
+            <!--________________________INSERTION idtop= last idtopo+1 si non selection si selection idtopo=idotopo_______________________________-->
+            <!--________________________INSERTION idpublication= idpublication_______________________________-->
+
+
+            <!--________________________INSERTION nom SPOT_______________________________-->
+            <div class="row" th:object="${spot}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="spotName">nom du spot</label>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group has-danger">
                         <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                             <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
-                            <input type="file" name="file"   id="file"/>
-                            <input type="submit" value="Upload" />
-
+                            <input type="text" th:field="*{nomSpot}" class="form-control" id="spotName"
+                                   placeholder="nom du spot" required>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-control-feedback">
-                         <span class="text-danger align-middle"
-                         >
-                         </span>
+            </div>
+
+            <!--________________________INSERTION description SPOT_______________________________-->
+            <div class="row" th:object="${spot}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="description">description</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="text" th:field="*{description}" class="form-control" id="description"
+                                   placeholder="description" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--________________________INSERTION lien SPOT_______________________________-->
+            <div class="row" th:object="${spot}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="file">image du Spot</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="file" name="file"   id="file" required/>
+                            <input type="submit" value="upload">
+
+                        </div>
                     </div>
                 </div>
             </div>
             <!--________________________INSERTION secteur_______________________________-->
             <!--________________________INSERTION idspot_______________________________-->
             <!--________________________INSERTION idpublication= idpublication_______________________________-->
-            <!--________________________INSERTION nom_______________________________-->
+
+            <!--________________________INSERTION secteur nom_______________________________-->
+            <div class="row" th:object="${secteur}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="secteurName">nom du secteur</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="text" th:field="*{nomSecteur}"  class="form-control" id="secteurName"
+                                   placeholder="nom du secteur" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--________________________INSERTION secteur lieu_______________________________-->
+            <div class="row" th:object="${secteur}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="lieuSecteur">lieu du secteur</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="text" th:field="*{lieuSecteur}" class="form-control" id="lieuSecteur"
+                                   placeholder="lieu du secteur" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--________________________INSERTION type_______________________________-->
+
+            <div class="row" th:object="${secteur}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="type">type</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <select class="browser-default custom-select" id="type"  th:field="*{type}">
+                                <option th:value="sportive">sportive</option>
+                                <option  th:value="traditionnelle">traditionnelle</option>
+                                <option th:value="Bloc">Bloc</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION lien_______________________________-->
+            <div class="row" th:object="${secteur}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="fileSecteur">image du secteur</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="file" name="fileSecteur"   id="fileSecteur" required/>
+                            <input type="submit" value="upload">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
+
+            <!--________________________INSERTION hauteur_______________________________-->
+
+            <div class="row" th:object="${secteur}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="hauteur">hauteur du secteur</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="number" min="1" th:field="*{hauteur}" class="form-control" id="hauteur"
+                                   placeholder="hauteur" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION VOIE nom_______________________________-->
+            <div class="row" th:object="${way}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="nomWay">nom de la voie</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="text" th:field="*{nomWay}"class="form-control" id="nomWay"
+                                   placeholder="nom de la voie" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION VOIE equip_______________________________-->
+            <div class="row" th:object="${way}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="equipees">Equipée?</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+
+
+                            <select class="browser-default custom-select" id="equipees" th:field="*{equipees}">
+                                <option  th:value="true">voie équipée</option>
+                                <option  th:value="false">non équipée</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--________________________INSERTION VOIE cotation _______________________________-->
+            <div class="row" th:object="${way}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="cotation">cotation</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <select class="browser-default custom-select" id="cotation" th:field="*{cotation}">
+                                <option  th:value="'3a'">3a</option>
+                                <option  th:value="'3b'">3b</option>
+                                <option  th:value="'3c'">3c</option>
+                                <option  th:value="'4a'">4a</option>
+                                <option  th:value="'4b'">4b</option>
+                                <option  th:value="'4c'">4c</option>
+                                <option  th:value="'5a'">5a</option>
+                                <option  th:value="'5b'">5b</option>
+                                <option  th:value="'5c'">5c</option>
+                                <option  th:value="'6a'">6a</option>
+                                <option  th:value="'6b'">6b</option>
+                                <option  th:value="'6c'">6c</option>
+                                <option  th:value="'7a'">7a</option>
+                                <option  th:value="'7b'">7b</option>
+                                <option  th:value="'7c'">7c</option>
+                                <option  th:value="'8a'">8a</option>
+                                <option  th:value="'8b'">8b</option>
+                                <option  th:value="'8c'">8c</option>
+                                <option  th:value="'9a'">9a</option>
+                                <option  th:value="'9b'">9b</option>
+                                <option  th:value="'9c'">9c</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--________________________INSERTION VOIE relai_______________________________-->
+            <div class="row" th:object="${way}">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="relai">nom de la voie</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group has-danger">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
+                            <input type="text" th:field="*{relai}" class="form-control" id="relai"
+                                   placeholder="relai" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-success"  ><i class="fa fa-user-plus"></i> <!--<a th:href="@{/login}">Register</a> -->Register</button>
+                    <button type="submit"  class="btn btn-success"  ><i class="fa fa-user-plus"></i> <a th:href="@{/home}">Register</a> </button>
                 </div>
             </div>
         </form>
-
     </div>
+
 </main>
 
-
-
-
-
 </body>
+<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <div th:replace="~{fragment/footer :: footer}">Footer</div>
 <!-- /container -->
 <!-- Bootstrap core JavaScript
@@ -136,4 +335,5 @@
 <script src="../../static/assets/js/popper.js"></script>
 <script src="../../static/bootstrap/js/bootstrap.min.js"></script>
 -->
+
 </html>

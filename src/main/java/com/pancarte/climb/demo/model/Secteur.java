@@ -24,10 +24,10 @@ public class Secteur {
 
 
     @Column(name = "nom")
-    private String nom;
+    private String nomSecteur;
 
     @Column(name = "lieu")
-    private String lieu;
+    private String lieuSecteur;
 
     @Column(name = "type")
     private String type;

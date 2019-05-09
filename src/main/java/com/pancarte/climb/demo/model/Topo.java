@@ -16,6 +16,6 @@ public class Topo {
     private int idtopo;
 
     @Column(name = "lieu")
-    private String lieu;
+    private String lieuTopo;
 
 }

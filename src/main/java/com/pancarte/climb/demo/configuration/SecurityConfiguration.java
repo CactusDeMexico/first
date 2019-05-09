@@ -41,12 +41,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception{
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/test").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/topo").permitAll()
                 .antMatchers("/home").permitAll()
+                .antMatchers("/img/*").anonymous()
+                .antMatchers("/bootstrap/*").anonymous()
+                .antMatchers("/css/*").anonymous()
+                .antMatchers("/js/*").anonymous()
+                .antMatchers("/assets/*").anonymous()
+                .antMatchers("/mdbootstrap.com/*").anonymous()
+                .antMatchers("/insertPublication").hasAuthority("ADMIN")
+                .antMatchers("/loggedhome").hasAuthority("ADMIN")
+                .antMatchers("/test").hasAuthority("ADMIN")
                 .antMatchers("/loggedhome","/test").hasAuthority("ADMIN").anyRequest()
+
                 .authenticated().and().csrf().disable()
 
                 .formLogin().loginPage("/login").failureUrl("/login?error=true")

@@ -17,6 +17,21 @@ public class WebMvcConfig implements WebMvcConfigurer {
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return bCryptPasswordEncoder;
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(
+                "/webjars/**",
+                "/img/**",
+                "/css/**",
+                "/bootstrap/**",
+                "/js/**")
+                .addResourceLocations(
+                        "classpath:/META-INF/resources/webjars/",
+                        "classpath:/static/img/",
+                        "classpath:/static/css/",
+                        "classpath:/static//bootstrap/",
+                        "classpath:/static/js/");
+    }
 
 
 
@@ -25,7 +40,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 
 
-//todo:jeu de donnée pour la base
-    //todo:inscrire un topo
-    //todo:
+
+
 }

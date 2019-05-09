@@ -43,20 +43,23 @@
 
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-    <style>
-        .carousel2 {
-            height: 60vh;
-        }
-
-
-    </style>
     <!-- Custom styles for this template -->
     <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
 </head>
 
 
 <body>
-<div th:replace="~{fragment/header :: header}">Header</div>
+<div th:if="${!userName.equals('0')}">
+    <div th:replace="~{fragment/loggedHeader :: loggedHeader}">
+        LogHeader
+    </div>
+</div>
+<div th:if="${userName.equals('0')}">
+    <div th:replace="~{fragment/header :: header}">
+        Header
+    </div>
+</div>
+
 <main role="main">
     <!-- carousel-->
     <div th:replace="~{fragment/carrousel :: carrousel}">carrousel</div>
@@ -78,7 +81,7 @@
     <tr th:each="topos, stat : ${topo}">
         <div class="container">
 
-            <h1><td th:text="${topos.getLieu()}"></td></h1>
+            <h1><td th:text="${topos.getLieuTopo()}"></td></h1>
             <!--_________________________ DEBUT SPOT_______________________ -->
 
             <div class="row">
@@ -146,11 +149,11 @@
                         <img th:src="@{/img/stlucie.png}" alt="work logo"/>
                         <img th:src="@{/static/img/stlucie.png}" alt="work logo"/>
                          -->
-                        <img src="#" th:src="@{/img/__${spots.getLien()}__}"
+                        <img src="#" th:src="@{/img/__${spots.getLienSpot()}__}"
                              class="card-img-top" alt="test 1" height="200px">
                         <div class="card-body">
                             <!-- Nom Sport -->
-                            <h5 class="card-title"><td th:text="${spots.getNom()}"></td></h5>
+                            <h5 class="card-title"><td th:text="${spots.getNomSpot()}"></td></h5>
                             <p class="card-text">
                             <td th:text="${spots.getDescription()}"></td>
                             <!-- <td th:text="${topos.getIdtopo()}"></td>
