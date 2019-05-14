@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "topo")
@@ -18,4 +19,15 @@ public class Topo {
     @Column(name = "lieu")
     private String lieuTopo;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "proprietaire", joinColumns = @JoinColumn(name = "idtopo"), inverseJoinColumns = @JoinColumn(name = "iduser"))
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
 }

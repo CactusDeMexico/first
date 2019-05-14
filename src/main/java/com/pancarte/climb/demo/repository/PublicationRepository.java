@@ -21,4 +21,7 @@ public interface PublicationRepository extends JpaRepository<Publication, Intege
 
     @Query(value = "SELECT * FROM publication u WHERE u.iduser =:iduser",nativeQuery = true)
     List<Publication> findByIdUser(@Param("iduser") Integer iduser);
+
+    @Query(value = "SELECT * FROM publication u WHERE u.name =:name",nativeQuery = true)
+    List<Publication> findByName(@Param("name") String name);
 }

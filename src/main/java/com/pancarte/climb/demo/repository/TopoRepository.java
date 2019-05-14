@@ -4,6 +4,7 @@ import com.pancarte.climb.demo.model.Spot;
 import com.pancarte.climb.demo.model.Topo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ public interface TopoRepository extends JpaRepository<Topo, Long> {
     List<Topo> findAllTopo();
     @Query(value = "SELECT idtopo FROM topo ORDER BY idtopo DESC LIMIT 1;",nativeQuery = true)
     int selectLastIdTopo();
+
+    @Query(value = "SELECT * FROM topo u WHERE u.lieu =:nom",nativeQuery = true)
+    List<Spot> findByLieu(@Param("lieu") String nom);
 
 
 

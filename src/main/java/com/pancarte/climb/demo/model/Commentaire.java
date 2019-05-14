@@ -1,10 +1,14 @@
 package com.pancarte.climb.demo.model;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name ="commentaire")
+@Getter
+@Setter
 public class Commentaire {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,8 +21,6 @@ public class Commentaire {
     @Column(name = "texte")
     private String texte;
 
-    @Column(name = "parent_commentaire")
-    private int parent_commentaire;
 
     @Column(name = "idpublication")
     private int idpublication;
