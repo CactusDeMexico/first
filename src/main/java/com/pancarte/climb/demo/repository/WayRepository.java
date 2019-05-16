@@ -12,12 +12,15 @@ import java.util.List;
 @Repository("wayRepository")
 public interface WayRepository extends JpaRepository<Way,Integer> {
     @Query(value = "SELECT * FROM voie u WHERE u.nom =:nom",nativeQuery = true)
-    List<Spot> findByName(@Param("nom") String nom);
+    List<Way> findByName(@Param("nom") String nom);
 
-    @Query(value = "SELECT * FROM voie u WHERE u.cotation =:nom",nativeQuery = true)
-    List<Spot> findByCotation(@Param("cotation") String nom);
+    @Query(value = "SELECT * FROM voie u WHERE u.cotation =:cotation",nativeQuery = true)
+    List<Way> findByCotation(@Param("cotation") String nom);
 
-    @Query(value = "SELECT * FROM voie u WHERE u.equipees =:nom",nativeQuery = true)
-    List<Spot> findByCotation(@Param("equipees") boolean nom);
+    @Query(value = "SELECT * FROM voie u WHERE u.equipees =:equipees",nativeQuery = true)
+    List<Way> findByequipement(@Param("equipees") boolean nom);
+
+    @Query(value = "SELECT * FROM voie u WHERE u.idsecteur =:idsecteur",nativeQuery = true)
+    List<Way> findByIdsecteur(@Param("idsecteur") int idsecteur);
 
 }

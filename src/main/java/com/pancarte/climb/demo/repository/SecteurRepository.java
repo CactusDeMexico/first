@@ -11,17 +11,22 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("SecteurRepository")
-public interface SecteurRepository extends JpaRepository<Secteur,Integer> {
-    @Query(value = "SELECT * FROM secteur u WHERE u.idsecteur > 0",nativeQuery = true)
+public interface SecteurRepository extends JpaRepository<Secteur, Integer> {
+    @Query(value = "SELECT * FROM secteur u WHERE u.idsecteur > 0", nativeQuery = true)
     List<Secteur> findAllSecteur();
 
-    @Query(value = "SELECT idsecteur FROM secteur ORDER BY idsecteur DESC LIMIT 1;",nativeQuery = true)
+    @Query(value = "SELECT idsecteur FROM secteur ORDER BY idsecteur DESC LIMIT 1;", nativeQuery = true)
     int selectLastIdSecteur();
 
-    @Query(value = "SELECT * FROM secteur u WHERE u.nom =:nom",nativeQuery = true)
+    @Query(value = "SELECT * FROM secteur u WHERE u.nom =:nom", nativeQuery = true)
     List<Secteur> findByName(@Param("nom") String nom);
-    @Query(value = "SELECT * FROM secteur u WHERE u.lieu =:nom",nativeQuery = true)
-    List<Spot> findByLieu(@Param("lieu") String nom);
-    @Query(value = "SELECT * FROM secteur u WHERE u.type =:nom",nativeQuery = true)
-    List<Spot> findByType(@Param("type") String nom);
+
+    @Query(value = "SELECT * FROM secteur u WHERE u.lieu =:lieu", nativeQuery = true)
+    List<Secteur> findByLieu(@Param("lieu") String nom);
+
+    @Query(value = "SELECT * FROM secteur u WHERE u.type =:type", nativeQuery = true)
+    List<Secteur> findByType(@Param("type") String nom);
+
+    @Query(value = "SELECT * FROM secteur u WHERE u.idspot =:idspot", nativeQuery = true)
+    List<Secteur> findByIdSpot(@Param("idspot") int idspot);
 }

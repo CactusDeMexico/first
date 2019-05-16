@@ -21,9 +21,10 @@ public interface TopoRepository extends JpaRepository<Topo, Long> {
     int selectLastIdTopo();
 
     @Query(value = "SELECT * FROM topo u WHERE u.lieu =:nom",nativeQuery = true)
-    List<Spot> findByLieu(@Param("lieu") String nom);
+    List<Topo> findByLieu(@Param("nom") String nom);
 
-
+    @Query(value = "SELECT * FROM topo u WHERE u.idtopo =:idtopo",nativeQuery = true)
+    List<Topo> findById(@Param("idtopo") int idtopo);
 
 
 }

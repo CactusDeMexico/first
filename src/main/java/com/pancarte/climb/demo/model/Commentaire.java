@@ -16,7 +16,7 @@ public class Commentaire {
     private int idcommentaire;
 
     @Column(name = "iduser")
-    private int idUser;
+    private int iduser;
 
     @Column(name = "texte")
     private String texte;

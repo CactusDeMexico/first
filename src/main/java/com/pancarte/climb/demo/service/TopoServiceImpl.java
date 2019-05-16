@@ -3,15 +3,20 @@ package com.pancarte.climb.demo.service;
 import com.pancarte.climb.demo.model.*;
 import com.pancarte.climb.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("topoService")
 public class TopoServiceImpl implements TopoService {
+
+//todo: page pret topo
 
     @Autowired
     private TopoRepository topoRepository;
@@ -24,12 +29,26 @@ public class TopoServiceImpl implements TopoService {
     @Autowired
     private WayRepository wayRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private CommentaireRepository commentaireRepository;
+
     @Override
     public List<Topo> findAllTopo() {
 
         return topoRepository.findAllTopo();
     }
 
+    @Override
+    public List<Topo> findById(@Param("idtopo") int idtopo) {
+
+        return topoRepository.findById(idtopo);
+    }
+    @Override
+    public void saveCommentaire(Commentaire commentaire){
+        commentaireRepository.save( commentaire);
+    }
     @Override
     public void savePublication(Publication publication, Topo topo, Spot spot, Secteur secteur, Way way, int IdUser,String imgSpot,String imgSecteur) {
         publication.setIduser(IdUser);
@@ -41,6 +60,8 @@ public class TopoServiceImpl implements TopoService {
         publicationRepository.save(publication);
         System.out.println("topo "+topo.getLieuTopo());
         //INSERTION TOPO ____________________________________
+        User userProprio = userRepository.findById(IdUser);
+        topo.setUsers(new HashSet<User>(Arrays.asList(userProprio)));
         topoRepository.save(topo);
         //INSERTION spot
         spot.setIdtopo(topoRepository.selectLastIdTopo());
@@ -57,6 +78,7 @@ public class TopoServiceImpl implements TopoService {
 
         way.setIdsecteur(secteurRepository.selectLastIdSecteur());
         System.out.println("VOIE "+way.getIdsecteur()+way.getNomWay()+way.isEquipees()+way.getRelai()+way.getCotation());
+
         wayRepository.save(way);
     }
 }

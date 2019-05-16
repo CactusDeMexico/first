@@ -78,7 +78,12 @@ public class UserController {
         return model;
     }
 
+    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
+    public String logout(  )
+    {
 
+        return "redirect:home";
+    }
 
     @RequestMapping(value= {"/access_denied"}, method=RequestMethod.GET)
     public ModelAndView accessDenied() {

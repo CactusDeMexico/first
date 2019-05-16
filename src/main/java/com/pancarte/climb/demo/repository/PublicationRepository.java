@@ -18,6 +18,8 @@ public interface PublicationRepository extends JpaRepository<Publication, Intege
     @Query(value = "SELECT idpublication FROM publication ORDER BY idpublication DESC LIMIT 1;",nativeQuery = true)
     int selectLastIdPublication();
 
+    @Query(value = "SELECT * FROM publication u WHERE u.idpublication =:idpublication",nativeQuery = true)
+    Publication findAllById(@Param("idpublication") Integer idpublication);
 
     @Query(value = "SELECT * FROM publication u WHERE u.iduser =:iduser",nativeQuery = true)
     List<Publication> findByIdUser(@Param("iduser") Integer iduser);

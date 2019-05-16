@@ -10,13 +10,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service("publicationService")
-public class PublicationServiceImpl implements PublicationService{
+public class PublicationServiceImpl implements PublicationService {
 
     @Autowired
     private PublicationRepository publicationRepository;
 
     @Override
-    public List<Publication> findByIdUser(@Param("iduser") Integer iduser){
+    public List<Publication> findByIdUser(@Param("iduser") Integer iduser) {
         return publicationRepository.findByIdUser(iduser);
+    }
+
+    @Override
+    public List<Publication> findByName(@Param("name") String name) {
+        return publicationRepository.findByName(name);
+    }
+
+    @Override
+    public Publication findAllById(@Param("idpublication") Integer idpublication){
+        return publicationRepository.findAllById(idpublication);
     }
 }

@@ -1,22 +1,18 @@
 package com.pancarte.climb.demo.controller;
 
 import com.pancarte.climb.demo.model.*;
-import com.pancarte.climb.demo.repository.PublicationRepository;
-import com.pancarte.climb.demo.repository.SecteurRepository;
-import com.pancarte.climb.demo.repository.SpotRepository;
-import com.pancarte.climb.demo.repository.WayRepository;
+import com.pancarte.climb.demo.repository.*;
 import com.pancarte.climb.demo.service.PublicationService;
 import com.pancarte.climb.demo.service.SpotService;
 import com.pancarte.climb.demo.service.TopoService;
 import com.pancarte.climb.demo.service.UserService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,6 +37,12 @@ public class TopoController {
     private UserService userService;
     @Autowired
     private PublicationService publicationService;
+    @Autowired
+    private SecteurRepository secteurRepository;
+    @Autowired
+    private WayRepository wayRepository;
+    @Autowired
+    private CommentaireRepository commentaireRepository;
 
     @RequestMapping(value = {"/test"}, method = RequestMethod.GET)
     public ModelAndView lastTopo()
@@ -58,6 +60,64 @@ public class TopoController {
         }
         model.addObject("userName", user.getName() + " " + user.getLastname());
         model.setViewName("home/loggedHome");
+        return model;
+    }
+    @RequestMapping(value = {"/com"}, method = RequestMethod.POST)
+    public String comment( Commentaire commentaire )
+    {
+        topoService.saveCommentaire(commentaire);
+        return "redirect:home";
+    }
+    @RequestMapping(value = {"/publication/"}, method = RequestMethod.GET)
+    public ModelAndView publication(@RequestParam("idtopo") int idtopo, @RequestParam("idspot") int idspot)
+    {
+        ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        List<Topo> topos = topoService.findById(idtopo);
+
+        for (Topo topo :topos)
+        {
+
+            System.out.println(topo.getLieuTopo()+" ____");
+
+        }
+        System.out.println(" voici l'id topo "+idspot +" id spot"+idspot);
+        if(!auth.getName().equals("anonymousUser"))
+        {
+            model.addObject("userName", user.getName() + " " + user.getLastname());
+            model.addObject("userConnectedId", user.getId());
+        }
+        else
+        {
+            model.addObject("userName","0");
+        }
+
+        List<Secteur> secteurs = secteurRepository.findByIdSpot(idspot);
+        List<Spot> spots = spotService.findByIdtopo(idtopo);
+        List<Way> ways = wayRepository.findAll();
+        int idPub=0;
+        Commentaire commentaires = new Commentaire();
+        for (Spot spot :spots)
+        {
+
+            System.out.println(spot.getIdpublication()+" ____");
+            idPub=spot.getIdpublication();
+            Publication pub = publicationService.findAllById(spot.getIdpublication());
+            System.out.println(pub.getName());
+        }
+       // List<User> users = userService.f
+        List<Commentaire> comment = commentaireRepository.findAllByIdPublication(idPub);
+        Publication pub = publicationService.findAllById(idPub);
+        System.out.println(pub.getIdpublication());
+        model.addObject("comment",comment);
+        model.addObject("publication",pub);
+        model.addObject("spot",spots);
+        model.addObject("topo",topos);
+        model.addObject("secteur",secteurs);
+        model.addObject("way",ways);
+        model.addObject("commentaire",commentaires);
+        model.setViewName("home/publication");
         return model;
     }
     @RequestMapping(value = {"/insertPublication"}, method = RequestMethod.GET)
@@ -90,16 +150,16 @@ public class TopoController {
     }
 
     @RequestMapping(value = {"/insertPublication"}, method = RequestMethod.POST, headers = "content-type=multipart/*")
-    public ModelAndView savePublication(@RequestParam("file") MultipartFile imgSpot, @RequestParam("fileSecteur") MultipartFile imgSecteur, Publication publication, Topo topo, Spot spot, Secteur secteur, Way way) throws IOException
+    public String savePublication(@RequestParam("file") MultipartFile imgSpot, @RequestParam("fileSecteur") MultipartFile imgSecteur, Publication publication, Topo topo, Spot spot, Secteur secteur, Way way) throws IOException
     {
-        ModelAndView model = new ModelAndView();
+        //ModelAndView model = new ModelAndView();
         System.out.println("test " + imgSpot.getOriginalFilename());
         Path currentRelativePath = Paths.get("");
         System.out.println("PATH /" + currentRelativePath.toAbsolutePath());
         String path="\\src\\main\\resources\\static\\img\\";
 
         String s = (currentRelativePath.toAbsolutePath().toString())+path;
-
+        System.out.println("____________________XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         byte[] bytesSpot = imgSpot.getBytes();
         byte[] bytesSecteur = imgSecteur.getBytes();
         Random random = new Random();
@@ -133,8 +193,8 @@ public class TopoController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         topoService.savePublication(publication, topo, spot, secteur, way, user.getId(), imgSpot.getOriginalFilename(), imgSecteur.getOriginalFilename());
-        model.setViewName("home/home");
-        return model;
+       // model.setViewName("home/home");
+        return "redirect:home";
     }
 
     @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)

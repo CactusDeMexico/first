@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository("spotRepository")
 @Transactional
@@ -23,4 +24,9 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
 
     @Query(value = "SELECT * FROM spot u WHERE u.nom =:nom",nativeQuery = true)
     List<Spot> findByName(@Param("nom") String nom);
+
+    @Query(value = "SELECT * FROM spot u WHERE u.idtopo =:idtopo",nativeQuery = true)
+    List<Spot> findByIdtopo(@Param("idtopo") int idtopo);
+
+
 }
