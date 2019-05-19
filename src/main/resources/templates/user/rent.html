@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Accueil</title>
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+          id="bootstrap-css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+    <style type="text/css">/* Chart.js */
+    @-webkit-keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+    @keyframes chartjs-render-animation {
+        from {
+            opacity: 0.99
+        }
+        to {
+            opacity: 1
+        }
+    }
+
+
+    </style>
+
+</head>
+<body>
+
+<div th:replace="~{fragment/header :: header}">Header</div>
+<main role="main">
+
+    <div class="jumbotron">
+        <div class="container" th:each="topos, stat : ${topo}">
+            <h1 class="display-3">location de :</h1><h1 th:text="${topos.getLieuTopo()}"></h1>
+            <p>Veuillez indiquer les disponibilitées pour votre location de topo</p>
+        </div>
+    </div>
+    <div th:each="topos, stat : ${topo}">
+        <div class="container">
+
+            <h1 th:text="${topos.getLieuTopo()}">
+
+            </h1>
+            <!--_________________________ DEBUT SPOT_______________________ -->
+
+            <div class="row">
+
+                <div class="col-md-4" th:each="spots, stat : ${spot}"
+                     th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
+                    <div class="card" style="width: 18rem;">
+                        <img src="#" th:src="@{/img/__${spots.getLienSpot()}__}"
+                             class="card-img-top" alt="test 1" height="200px">
+                        <div class="card-body">
+                            <!-- Nom Sport -->
+                            <h5 class="card-title" th:text="${spots.getNomSpot()}">
+
+                            </h5>
+                            <p class="card-text" th:text="${spots.getDescription()}">
+
+                            </p>
+                            <a th:href="@{/publication/(idtopo=${spots.getIdtopo()},idspot=${spots.getIdspot()})}"
+                               class="btn btn-success">voir</a>
+                        </div>
+                    </div>
+                    <!-- _______________________FIN SPOT_________________________ -->
+                </div>
+            </div>
+        </div>
+        <!--______________ FIN TOPO _____________________________-->
+    </div>
+    <div class="container" th:each="topos, stat : ${topo}">
+        <form class="form-horizontal" role="form" method="POST" th:action="@{/rent/(idtopo=${topos.getIdtopo()})}" th:object="${rent}">
+            <div class="row">
+                <hr>
+                <div class="col-md-3 field-label-responsive">
+                    <label for="borrowinDate">date du début de location</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="date" th:field="*{creationdate}" class="form-control" id="borrowinDate"
+                                   placeholder="borrowingdate" required autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 field-label-responsive">
+                    <label for="return">date de retour</label>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                            <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                            <input type="date" th:field="*{returnDate}" class="form-control" id="return"
+                                   placeholder="date de retour" required autofocus>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-success"  ><i class="fa fa-user-plus"></i> <a th:href="@{/loggedHome}">Louer</a></button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</main>
+
+
+
+
+
+</body>
+<div th:replace="~{fragment/footer :: footer}">Footer</div>
+<!-- /container -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="../../static/assets/js/jquery.min.js"></script>
+<script src="../../static/assets/js/popper.js"></script>
+<script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+
+</html>
