@@ -32,7 +32,7 @@
         </div>
     </div>
     <div class="container">
-        <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data" >
+        <form class="form-horizontal" th:action="@{/insertPublication}"role="form" method="POST" enctype="multipart/form-data" >
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
@@ -315,7 +315,7 @@
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
-                    <button type="submit"  class="btn btn-success"  ><i class="fa fa-user-plus"></i> <a th:href="@{/home}">Register</a> </button>
+                    <button type="submit"   th:href="@{/home}" class="btn btn-success"  ><i class="fa fa-user-plus"></i> Enregistrer </button>
                 </div>
             </div>
         </form>
@@ -324,16 +324,7 @@
 </main>
 
 </body>
-<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
-<script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
 <div th:replace="~{fragment/footer :: footer}">Footer</div>
-<!-- /container -->
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster
-<script src="../../static/assets/js/jquery.min.js"></script>
-<script src="../../static/assets/js/popper.js"></script>
-<script src="../../static/bootstrap/js/bootstrap.min.js"></script>
--->
 
 </html>

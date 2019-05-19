@@ -4,6 +4,7 @@ import com.pancarte.climb.demo.model.Publication;
 import com.pancarte.climb.demo.repository.PublicationRepository;
 import com.pancarte.climb.demo.repository.SpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Service("publicationService")
 public class PublicationServiceImpl implements PublicationService {
 
+    @Qualifier("publicationRepository")
     @Autowired
     private PublicationRepository publicationRepository;
 

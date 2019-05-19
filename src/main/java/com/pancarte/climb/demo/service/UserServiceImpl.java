@@ -5,6 +5,7 @@ import com.pancarte.climb.demo.model.User;
 import com.pancarte.climb.demo.repository.RoleRepository;
 import com.pancarte.climb.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,11 @@ import java.util.HashSet;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
+    @Qualifier("userRepository")
     @Autowired
     private UserRepository userRepository;
 
+    @Qualifier("roleRepository")
     @Autowired
     private RoleRepository roleRepository;
 

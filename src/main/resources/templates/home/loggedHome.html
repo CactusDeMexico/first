@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,16 +12,64 @@
           id="bootstrap-css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 
+    <style>
+        .product-flags {
+            position: absolute;
+            top: 15px;
+            margin-left: -50px;
+            width: 100%;
+        }
 
-    <!-- Custom styles for this template -->
-    <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
+        li.product-flag {
+            display: block;
+            position: absolute;
+            margin-right: 2px;
+            background-color: #2FB5D2;
+            font-weight: 800;
+            padding: 0.3125rem 0.4375rem;
+            text-transform: uppercase;
+            color: white;
+            box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7),
+            -1px 2px 20px rgba(255, 255, 255, 0.6) inset;
+
+
+        }
+
+        li.product-flag2 {
+            display: block;
+            position: absolute;
+            top: 80px;
+            margin-right: 2px;
+            background-color: #37a52b;
+            font-weight: 800;
+            padding: 0.3125rem 0.4375rem;
+            text-transform: uppercase;
+            color: white;
+            box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7),
+            -1px 2px 20px rgba(255, 255, 255, 0.6) inset;
+        }
+
+        li.product-flag3 {
+            display: block;
+            position: absolute;
+            top: 160px;
+            margin-right: 2px;
+            background-color: #f4425f;
+            font-weight: 800;
+            padding: 0.3125rem 0.4375rem;
+            text-transform: uppercase;
+            color: white;
+            box-shadow: -1px 2px 5px 1px rgba(0, 0, 0, 0.7),
+            -1px 2px 20px rgba(255, 255, 255, 0.6) inset;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{fragment/loggedHeader :: loggedHeader}">header</div>
@@ -29,26 +77,175 @@
 <!-- Main jumbotron for a primary marketing message or call to action -->
 <div class="jumbotron">
     <div class="container">
-        <h1 class="display-3" >Bonjour <span th:utext="${userName}"></span>, voici votre compte.</h1>
+        <h1 class="display-3">Bonjour <span th:utext="${userName}"></span>, voici votre compte.</h1>
         <p>This is a template for a simple marketing or informational website. It includes a large callout called a
             jumbotron and three supporting pieces of content. Use it as a starting point to create something more
             unique.</p>
-        <p><a class="btn btn-success btn-lg" role="button"  th:href="@{/logout}">se déconnecter »</a></p>
+        <p><a class="btn btn-success btn-lg" role="button" th:href="@{/logout}">se déconnecter »</a></p>
     </div>
 </div>
 
-<div class="container">
-   <main>
-       <div class="row">
-           <h1 class="display-3" >Vos publication </h1>
 
-       </div>
+<main>
+    <div class="container">
+        <div class="row">
+            <h1 class="display-3">Vos publications </h1>
+            <div class="container" th:each="publications, stat : ${publication}">
+                <!-- Example row of columns -->
+                <h1 th:text="${publications.getName()}"> publier le</h1>
+                <h1 th:text="${publications.getCreationdate()}"> derniere mise à jour le </h1>
+                <h1 th:text="${publications.getUpdatedate()}"></h1>
+
+                <div th:each="topos, stat : ${topo}">
+                    <div>
+                        <div th:each="spots, stat : ${spot}"
+                             th:if="${publications.getIdpublication()} == ${spots.getIdpublication()}">
+                            <div th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
+                                <h2 class="text-center" th:text="${topos.getLieuTopo()}"></h2>
+                                <hr>
+                                <div class="container">
+                                    <div class="col-md-4">
+                                        <div class="card" style="width: 18rem;">
+                                            <a href="">
+                                                <img src="#" th:src="@{/img/__${spots.getLienSpot()}__}"
+                                                     class="card-img-top"
+                                                     alt="..."
+                                                     height="200px"> </a>
+                                            <div class="caption">
+                                                <div class="card-body">
+
+                                                    <ul class="product-flags">
+                                                        <div th:each="rents, stat : ${rent}">
+                                                            <div
+                                                                    th:if="${rents.getIdtopo()} == ${topos.getIdtopo()}">
+
+                                                                <!-- si il y deja une location-->
+                                                                <div th:if="${rents.iduser!=UserId}">
+                                                                    <a th:href="@{/rented/(idtopo=${spots.getIdtopo()})}">
+                                                                        <li class="product-flag new">
+                                                                            loué
+                                                                        </li>
+                                                                    </a>
+                                                                </div>
+                                                                <!-- si il n'y a pas de location-->
+                                                                <div th:if="${rents.iduser==UserId}">
+                                                                    <a th:href="@{/rent/(idtopo=${spots.getIdtopo()})}">
+                                                                        <li class="product-flag new">
+                                                                            en location
+                                                                        </li>
+                                                                    </a>
+                                                                </div>
+
+                                                            </div>
+                                                            <div th:if="${rents.getIdtopo()} != ${topos.getIdtopo()}">
+                                                                <a th:href="@{/rent/(idtopo=${spots.getIdtopo()})}">
+                                                                    <li class="product-flag new">
+                                                                        louer
+                                                                    </li>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div th:if="${rent==0}">
+                                                            <a th:href="@{/rent/(idtopo=${spots.getIdtopo()})}"> <li class="product-flag new">
+                                                                louer
+                                                            </li>
+                                                            </a>
+                                                        </div>
+                                                        <li class="product-flag2 new"> modifier</li>
+                                                        <li class="product-flag3 new"> supprimer</li>
+                                                    </ul>
+
+                                                    <h3 th:text="${spots.getNomSpot()}"></h3>
+                                                    <p th:text="${spots.getDescription()}"></p>
+                                                </div>
+                                                <a th:href="@{/publication/(idtopo=${spots.getIdtopo()},idspot=${spots.getIdspot()})}"
+                                                   class="btn btn-success">voir</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="container" th:each="secteurs, stat : ${secteur}"
+                                         th:if="${secteurs.getIdspot()} == ${spots.getIdspot()}">
+                                        <hr>
+                                        <h2 class="text-center">les secteurs de : </h2>
+                                        <h2 th:text="${spots.getNomSpot()}"></h2>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="card" style="width: 18rem;">
+                                                        <img src="#" th:src="@{/img/__${secteurs.getLien()}__}"
+                                                             class="card-img-top"
+                                                             alt="..."
+                                                             height="200px">
+                                                        <div class="caption">
+                                                            <div class="card-body">
+                                                                <ul class="product-flags">
+                                                                    <li class="product-flag new"> louer</li>
+                                                                    <li class="product-flag2 new"> modifier</li>
+                                                                    <li class="product-flag3 new"> supprimer</li>
+                                                                </ul>
+                                                                <ul class="product-flags">
+                                                                    <li class="product-flag new">xx jours restants</li>
+                                                                </ul>
+                                                                <h3 th:text="${secteurs.getNomSecteur()}"></h3>
+                                                                <p th:text="${secteurs.getLieuSecteur()}"></p>
+                                                                <p th:text="${secteurs.getType()}"></p>
+                                                                <h4 th:text="${secteurs.getHauteur()}"></h4>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <h3 class="text-center"> les voies</h3>
+                                                <table class="table center-block">
+                                                    <thead>
+                                                    <tr>
+                                                        <th scope="col-sm-8">#</th>
+                                                        <th scope="col-sm-8">nom</th>
+                                                        <th scope="col-sm-8">cotation</th>
+                                                        <th scope="col-sm-8">relai</th>
+                                                        <th scope="col-sm-8">équipé</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody th:each="ways, stat : ${way}"
+                                                           th:if="${secteurs.getIdsecteur()} == ${ways.getIdsecteur()}">
+                                                    <tr>
+                                                        <th scope="row" th:text="${ways.getIdvoie()}">
+
+                                                        </th>
+                                                        <td th:text="${ways.getNomWay()}"></td>
+                                                        <td th:text="${ways.getCotation()}"></td>
+                                                        <td th:text="${ways.getRelai()}"></td>
+                                                        <td th:text="${ways.isEquipees()}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </main>
-</div>
-<div th:replace="~{fragment/footer :: footer}">Footer</div>
 
 
 </body>
+<div th:replace="~{fragment/footer :: footer}">Footer</div>
+
 <!-- /container -->
 <!-- Bootstrap core JavaScript
 ================================================== -->
