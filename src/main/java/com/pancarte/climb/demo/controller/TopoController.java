@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,23 +32,24 @@ import java.util.Random;
 public class TopoController {
 
     private final TopoService topoService;
-     private final TopoRepository topoRepository;
+    private final TopoRepository topoRepository;
     private final SpotService spotService;
     private final UserService userService;
     private final PublicationService publicationService;
     private final SecteurRepository secteurRepository;
     private final WayRepository wayRepository;
     private final ProprietaireRepository proprietaireRepository;
-    private  final WayService wayService;
-
+    private final WayService wayService;
+    private final SpotRepository spotRepository;
     private final CommentaireRepository commentaireRepository;
     private final RentRepository rentRepository;
 
     @Autowired
-    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
+    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
         this.topoService = topoService;
         this.topoRepository = topoRepository;
         this.spotService = spotService;
+        this.spotRepository = spotRepository;
         this.userService = userService;
         this.wayService = wayService;
         this.publicationService = publicationService;
@@ -58,7 +60,7 @@ public class TopoController {
         this.proprietaireRepository = proprietaireRepository;
     }
 
-   @RequestMapping(value = {"/content"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/content"}, method = RequestMethod.GET)
     public ModelAndView content(@RequestParam("idtopo") int idtopo) {
         ModelAndView model = new ModelAndView();
         Rent rent = new Rent();
@@ -88,6 +90,7 @@ public class TopoController {
 
         return model;
     }
+
     @RequestMapping(value = {"/index"}, method = RequestMethod.GET)
     public ModelAndView index() {
         ModelAndView model = new ModelAndView();
@@ -111,7 +114,7 @@ public class TopoController {
         model.addObject("spot", spot);
         model.addObject("rent", rent);
         model.addObject("view", "borrow");
-       // model.setViewName("user/borrow");
+        // model.setViewName("user/borrow");
         model.setViewName("index");
         return model;
     }
@@ -122,13 +125,12 @@ public class TopoController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
 
-        Rent rent =rentRepository.getOne(idtopo);
+        Rent rent = rentRepository.getOne(idtopo);
         rent.setSeen(true);
         rent.setBorrow(false);
         Proprietaire proprietaire = proprietaireRepository.getOne(rent.getIdtopo());
         rent.setIduser(proprietaire.getIduser());
         rentRepository.save(rent);
-
 
         return "redirect:/loggedhome";
     }
@@ -154,6 +156,16 @@ public class TopoController {
         User user = userService.findUserByEmail(auth.getName());
         List<Rent> rents = rentRepository.findAll();
         List<Proprietaire> proprietaires = proprietaireRepository.findAll();
+        int nb=0;
+        for (Rent rent : rents) {
+        if(!rent.isBorrow()){
+            nb++;
+        }
+        } model.addObject("location", false);
+        if(nb==rents.size()){
+            model.addObject("location", true);
+        }
+        System.out.println(nb+" "+rents.size());
 
         model.addObject("userName", user.getName() + " " + user.getLastname());
         List<Topo> topo = topoService.findAllTopo();
@@ -164,7 +176,7 @@ public class TopoController {
         model.addObject("spot", spot);
         model.addObject("rent", rents);
         model.addObject("view", "borrowed");
-       // model.setViewName("user/borrowed");
+        // model.setViewName("user/borrowed");
         model.setViewName("index");
         return model;
     }
@@ -187,28 +199,163 @@ public class TopoController {
 
         return model;
     }
-//todo:add topo
-    //todo:uptopo
 
-@RequestMapping(value = {"/addspot"}, method = RequestMethod.POST)
-public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur secteur, Way way) {
-    //Date creationDate, Date returnDate
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    User user = userService.findUserByEmail(auth.getName());
-
-    return "redirect:/loggedhome";
-}
-    @RequestMapping(value = {"/addSecteur"}, method = RequestMethod.POST)
-    public String addSecteur(@RequestParam("idspot") int idspot, Secteur secteur, Way way) {
-        //Date creationDate, Date returnDate
+    @RequestMapping(value = {"/UpdateSpot"}, method = RequestMethod.GET)
+    public ModelAndView updateSpot(@RequestParam("idspot") int idspot) {
+        ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
+        Spot spot = spotRepository.getOne(idspot);
+
+        model.addObject("spot", spot);
+
+        model.addObject("view", "updateSpot");
+        model.addObject("userName", user.getName() + " " + user.getLastname());
+        model.setViewName("index");
+        return model;
+    }
+
+    @RequestMapping(value = {"/updateSpot"}, method = RequestMethod.POST)
+    public String updateSpot(Spot spot) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        Spot upSpot = spotRepository.getOne(spot.getIdspot());
+        spot.setLienSpot(upSpot.getLienSpot());
+        spotRepository.save(spot);
+        return "redirect:/loggedhome";
+    }
+
+    @RequestMapping(value = {"/addspot"}, method = RequestMethod.GET)
+    public ModelAndView addSpot(@RequestParam("idtopo") int idtopo, @RequestParam("idpublication") int idpublication, Spot spot, Secteur secteur, Way way) {
+        ModelAndView model = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        spot.setIdtopo(idtopo);
+        spot.setIdpublication(idpublication);
+        model.addObject("way", way);
+        model.addObject("spot", spot);
+        model.addObject("secteur", secteur);
+        model.addObject("view", "addSpot");
+        model.addObject("userName", user.getName() + " " + user.getLastname());
+        model.setViewName("index");
+        return model;
+    }
+
+    @RequestMapping(value = {"/addspot"}, method = RequestMethod.POST)
+    public String addedSpot(@RequestParam("file") MultipartFile imgSpot, @RequestParam("fileSecteur") MultipartFile imgSecteur, @RequestParam("idtopo") int idtopo, Spot spot, Secteur secteur, Way way) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+
+        Path currentRelativePath = Paths.get("");
+        String path = "\\src\\main\\resources\\static\\img\\";
+        String s = (currentRelativePath.toAbsolutePath().toString()) + path;
+        byte[] bytesSpot = imgSpot.getBytes();
+        byte[] bytesSecteur = imgSecteur.getBytes();
+        Random random = new Random();
+        int numb;
+        Path pathSpot = Paths.get(s + imgSpot.getOriginalFilename());
+        Path pathSector = Paths.get(s + imgSecteur.getOriginalFilename());
+
+        while (pathSpot.toFile().exists() || pathSector.toFile().exists() || pathSector == pathSpot) {
+            numb = random.nextInt(10);
+            System.out.println();
+            if (pathSpot.toFile().exists()) {
+                pathSpot = Paths.get(s + numb + imgSpot.getOriginalFilename());
+            }
+            if (pathSector.toFile().exists()) {
+                pathSector = Paths.get(s + numb + imgSpot.getOriginalFilename());
+            }
+            if (pathSector == pathSpot) {
+                pathSector = Paths.get(s + numb + imgSpot.getOriginalFilename());
+            }
+        }
+
+        Files.write(pathSpot, bytesSpot);
+        Files.write(pathSector, bytesSecteur);
+        spot.setLienSpot(imgSpot.getOriginalFilename());
+        spotRepository.save(spot);
+        secteur.setIdspot(spotRepository.selectLastIdspot());
+        secteur.setLien(imgSecteur.getOriginalFilename());
+        secteurRepository.save(secteur);
+        way.setIdsecteur(secteurRepository.selectLastIdSecteur());
+        wayRepository.save(way);
+        return "redirect:/loggedhome";
+    }
+
+    @RequestMapping(value = {"/updateSecteur"}, method = RequestMethod.GET)
+    public ModelAndView updateSecteur(@RequestParam("idsecteur") int idsecteur) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        ModelAndView model = new ModelAndView();
+        Secteur secteur = secteurRepository.getOne(idsecteur);
+
+        model.addObject("secteur", secteur);
+        model.addObject("view", "updateSecteur");
+        model.addObject("userName", user.getName() + " " + user.getLastname());
+        model.setViewName("index");
+        return model;
+    }
+
+    @RequestMapping(value = {"/updateSecteur"}, method = RequestMethod.POST)
+    public String updatedSecteur(Secteur secteur) {
+        System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
+
+        Secteur upsec = secteurRepository.getOne(secteur.getIdsecteur());
+        secteur.setIdpublication(upsec.getIdpublication());
+        secteur.setIdspot(upsec.getIdspot());
+        secteur.setLien(upsec.getLien());
+        secteurRepository.save(secteur);
+        return "redirect:/loggedhome";
+    }
+
+    @RequestMapping(value = {"/addSecteur"}, method = RequestMethod.GET)
+    public ModelAndView addSecteur(@RequestParam("idpublication") int idpublication, @RequestParam("idspot") int idspot, Secteur secteur, Way way) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        ModelAndView model = new ModelAndView();
+        secteur.setIdpublication(idpublication);
+        secteur.setIdspot(idspot);
+
+        model.addObject("way", way);
+        model.addObject("secteur", secteur);
+        model.addObject("view", "addSecteur");
+        model.addObject("userName", user.getName() + " " + user.getLastname());
+        model.setViewName("index");
+        return model;
+    }
+
+    @RequestMapping(value = {"/addSecteur"}, method = RequestMethod.POST)
+    public String addedSecteur(@RequestParam("fileSecteur") MultipartFile imgSecteur, Secteur secteur, Way way, BindingResult bindingResult) throws Exception {
+        System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
+
+        bindingResult.getTarget();
+        Path currentRelativePath = Paths.get("");
+        String path = "\\src\\main\\resources\\static\\img\\";
+        String s = (currentRelativePath.toAbsolutePath().toString()) + path;
+        byte[] bytesSecteur = imgSecteur.getBytes();
+        Random random = new Random();
+        int numb;
+        Path pathSector = Paths.get(s + imgSecteur.getOriginalFilename());
+        while (pathSector.toFile().exists()) {
+            numb = random.nextInt(10);
+            System.out.println();
+
+            if (pathSector.toFile().exists()) {
+                pathSector = Paths.get(s + numb + imgSecteur.getOriginalFilename());
+            }
+        }
+        Files.write(pathSector, bytesSecteur);
+        secteur.setLien(imgSecteur.getOriginalFilename());
+        secteurRepository.save(secteur);
+        way.setIdsecteur(secteurRepository.selectLastIdSecteur());
+        wayRepository.save(way);
 
         return "redirect:/loggedhome";
     }
 
     @RequestMapping(value = {"/updateVoie"}, method = RequestMethod.GET)
-    public ModelAndView updateVoie(@RequestParam("idsecteur") int idsecteur,@RequestParam("idway") int idway) {
+    public ModelAndView updateVoie(@RequestParam("idsecteur") int idsecteur, @RequestParam("idway") int idway) {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
@@ -220,9 +367,10 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
         model.setViewName("index");
         return model;
     }
+
     @RequestMapping(value = {"/updateVoie"}, method = RequestMethod.POST)
-    public String  updatedVoie(Way way) {
-        System.out.println("VOIE " + way.getIdsecteur() + way.getNomWay() + way.isEquipees() + way.getRelai() + way.getCotation()+way.getIdvoie());
+    public String updatedVoie(Way way) {
+        System.out.println("VOIE " + way.getIdsecteur() + way.getNomWay() + way.isEquipees() + way.getRelai() + way.getCotation() + way.getIdvoie());
 
         wayRepository.save(way);
         return "redirect:/loggedhome";
@@ -240,12 +388,13 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
         model.setViewName("index");
         return model;
     }
+
     @RequestMapping(value = {"/addVoie"}, method = RequestMethod.POST)
-    public String addedVoie( Way way) {
-        //Date creationDate, Date returnDate
+    public String addedVoie(Way way) {
         wayRepository.save(way);
         return "redirect:/loggedhome";
     }
+
     @RequestMapping(value = {"/rent"}, method = RequestMethod.POST)
     public String rentIt(@RequestParam("idtopo") int idtopo, Rent rent) {
         //Date creationDate, Date returnDate
@@ -302,12 +451,10 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
 
             rentRepository.save(rent);
             topoRepository.save(topo);
-
         }
 
         return "redirect:/loggedhome";
     }
-
 
     @RequestMapping(value = {"/com"}, method = RequestMethod.POST)
     public String comment(Commentaire commentaire) {
@@ -321,6 +468,7 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
         System.out.println(search + " la recherche ");
         List<Spot> spots = spotService.findAllSpot();
         List<Topo> topos = topoService.findAllTopo();
+        String cap = search.substring(0, 1).toUpperCase() + search.substring(1);
 
         String lastSpotDescription = "";
         String lastSpotName = "";
@@ -332,15 +480,23 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
                 }
             }
         }
+        System.out.println(cap);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         spots = spotService.findByName(search);
         topos = topoService.findByLieu(search);
+        topos.addAll(topoService.findByLieu(cap));
+        spots.addAll(spotService.findByName(cap));
         for (Spot spot : spots) {
 
             System.out.println(" le topo " + spot.getNomSpot());
             if (!topos.containsAll(topoService.findById(spot.getIdtopo()))) {
-                topos.addAll(topoService.findById(spot.getIdtopo()));
+                //topos.addAll(topoService.findById(spot.getIdtopo()));
+            }
+            for (Topo topo : topos) {
+                if ((topos.toArray().toString()).contains(Integer.toString(spot.getIdtopo()))) {
+                    topos.addAll(topoService.findById(spot.getIdtopo()));
+                }
             }
         }
 
@@ -456,7 +612,7 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
         model.addObject("secteur", secteur);
         model.addObject("way", way);
         model.addObject("userName", user.getName() + " " + user.getLastname());
-       // model.setViewName("user/inscriptionTopo");
+        // model.setViewName("user/inscriptionTopo");
         model.addObject("view", "inscriptionTopo");
         model.setViewName("index");
         return model;
@@ -527,7 +683,6 @@ public String addSpot(@RequestParam("idtopo") int idtopo,  Spot spot, Secteur se
             model.addObject("userName", user.getName() + " " + user.getLastname());
         } else {
             model.addObject("userName", "0");
-
         }
 
         System.out.println(auth.isAuthenticated());

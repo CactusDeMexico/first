@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Repository("spotRepository")
 @Transactional
-public interface SpotRepository extends JpaRepository<Spot, Long> {
+public interface SpotRepository extends JpaRepository<Spot, Integer> {
 
 
     @Query(value = "SELECT * FROM spot u WHERE u.idspot > 0",nativeQuery = true)
