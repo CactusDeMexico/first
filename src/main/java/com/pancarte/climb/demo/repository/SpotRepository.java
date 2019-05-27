@@ -22,8 +22,7 @@ public interface SpotRepository extends JpaRepository<Spot, Long> {
     @Query(value = "SELECT idspot FROM spot ORDER BY idspot DESC LIMIT 1;",nativeQuery = true)
     int selectLastIdspot();
 
-    @Query(value = "SELECT * FROM spot u WHERE u.nom Like %:nom%  or description like %:nom%" +
-            "",nativeQuery = true)
+    @Query(value = "SELECT * FROM spot u WHERE u.nom Like %:nom%  or description like %:nom%",nativeQuery = true)
     List<Spot> findByName(@Param("nom") String nom);
    // SELECT * FROM spot WHERE nom Like '%gr%' or description like '%ensemble%';
     @Query(value = "SELECT * FROM spot u WHERE u.idtopo =:idtopo",nativeQuery = true)

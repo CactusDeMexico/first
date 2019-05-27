@@ -10,9 +10,9 @@
 
         <!-- Database Connection Settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/climb?zeroDateTimeBehavior=CONVERT_TO_NULL&serverTimezone=UTCb</property>
-        <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password"></property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/climb</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">root</property>
 
         <!-- Echo All Executed SQL To Console -->
         <property name="show_sql">true</property>
@@ -21,6 +21,13 @@
         <property name="hibernate.current_session_context_class">org.hibernate.context.internal.ThreadLocalSessionContext</property>
 
         <!-- Mapping With Model Class Containing Annotations -->
-        <mapping class="com.pancarte.climb.demo.model.Proprietaire" />
+        <mapping class="com.pancarte.climb.demo.model.Rent" />
+        <mapping class="com.pancarte.climb.demo.model.Commentaire" />
+        <mapping class="com.pancarte.climb.demo.model.Topo"/>
+        <mapping class="com.pancarte.climb.demo.model.User"/>
+        <mapping class="com.pancarte.climb.demo.model.Role"/>
+        <mapping class="com.pancarte.climb.demo.model.Way"/>
+        <mapping class="com.pancarte.climb.demo.model.Spot"/>
+        <mapping class="com.pancarte.climb.demo.model.Secteur" />
     </session-factory>
 </hibernate-configuration>

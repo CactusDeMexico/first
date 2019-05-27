@@ -2,8 +2,12 @@ package com.pancarte.climb.demo.service;
 
 import com.pancarte.climb.demo.model.*;
 import com.pancarte.climb.demo.repository.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -17,33 +21,33 @@ import java.util.List;
 @Service("topoService")
 public class TopoServiceImpl implements TopoService {
 
-//todo: page pret topo
 
-    @Qualifier("topoRepository")
-    @Autowired
-    private TopoRepository topoRepository;
-    @Qualifier("publicationRepository")
-    @Autowired
-    private PublicationRepository publicationRepository;
-    @Qualifier("spotRepository")
-    @Autowired
-    private SpotRepository spotRepository;
-    @Autowired
-    private SecteurRepository secteurRepository;
-    @Qualifier("wayRepository")
-    @Autowired
-    private WayRepository wayRepository;
 
-    @Qualifier("userRepository")
-    @Autowired
-    private UserRepository userRepository;
-    @Qualifier("commentaireRepository")
-    @Autowired
-    private CommentaireRepository commentaireRepository;
+    private final TopoRepository topoRepository;
+    private final PublicationRepository publicationRepository;
+    private final SpotRepository spotRepository;
+    private final SecteurRepository secteurRepository;
+    private final WayRepository wayRepository;
 
-    @Qualifier("rentRepository")
+    private final UserRepository userRepository;
+    private final CommentaireRepository commentaireRepository;
+
+    private final RentRepository rentRepository;
+
+    private final ProprietaireRepository proprietaireRepository;
+
     @Autowired
-    private RentRepository rentRepository;
+    public TopoServiceImpl(@Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("publicationRepository") PublicationRepository publicationRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("userRepository") UserRepository userRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
+        this.topoRepository = topoRepository;
+        this.publicationRepository = publicationRepository;
+        this.spotRepository = spotRepository;
+        this.secteurRepository = secteurRepository;
+        this.wayRepository = wayRepository;
+        this.userRepository = userRepository;
+        this.commentaireRepository = commentaireRepository;
+        this.rentRepository = rentRepository;
+        this.proprietaireRepository = proprietaireRepository;
+    }
 
     @Override
     public void rentTopo(Rent rent) {
@@ -59,10 +63,24 @@ public class TopoServiceImpl implements TopoService {
     public List<Proprietaire> findOwner(@Param("idtopo") int idtopo){
         return topoRepository.findOwner(idtopo);
     }
+
+
     @Override
     public List<Topo> findByLieu(@Param("nom") String nom){
         return topoRepository.findByLieu(nom);
     }
+
+    @Override
+    public Topo findOneById(@Param("idtopo") int idtopo){
+        return topoRepository. findOneById(idtopo);
+    }
+
+    @Override
+    public void borrow(Rent rent) {
+
+        rentRepository.save(rent);
+    }
+
     @Override
     public List<Topo> findById(@Param("idtopo") int idtopo) {
 
@@ -88,6 +106,17 @@ public class TopoServiceImpl implements TopoService {
         User userProprio = userRepository.findById(IdUser);
         topo.setUsers(new HashSet<User>(Arrays.asList(userProprio)));
         topoRepository.save(topo);
+        //definiton de rent
+        Rent rent = new Rent();
+        rent.setSeen(true);
+        rent.setBorrow(false);
+        rent.setReturnDate(now);
+        rent.setIdtopo(topo.getIdtopo());
+        rent.setIsloan(false);
+        rent.setCreationDate(now);
+        rent.setIduser(IdUser);
+        rentRepository.save(rent);
+
         //INSERTION spot
         spot.setIdtopo(topoRepository.selectLastIdTopo());
         spot.setIdpublication(publicationRepository.selectLastIdPublication());

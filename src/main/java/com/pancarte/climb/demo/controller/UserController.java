@@ -14,13 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -49,17 +52,15 @@ public class UserController {
         this.rentRepository = rentRepository;
     }
 
-    @RequestMapping(value= {"/topo"}, method=RequestMethod.GET)
-    public  ModelAndView accueil() {
-        ModelAndView model = new ModelAndView();
-        model.setViewName("home/topo");
-        return model;
-    }
+
 
     @RequestMapping(value= {"/login"}, method=RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView model = new ModelAndView();
-        model.setViewName("user/login");
+        model.addObject("view", "login");
+        model.addObject("userName", "0");
+        //model.setViewName("user/login");
+        model.setViewName("index");
         return model;
     }
 
@@ -68,7 +69,12 @@ public class UserController {
         ModelAndView model = new ModelAndView();
         User user = new User();
         model.addObject("user", user);
-        model.setViewName("user/signup");
+       // model.setViewName("user/signup");
+        model.addObject("view", "signup");
+        model.setViewName("index");
+
+            model.addObject("userName", "0");
+
 
         return model;
     }
@@ -82,13 +88,20 @@ public class UserController {
             bindingResult.rejectValue("email", "error.user", "This email already exists!");
         }
         if(bindingResult.hasErrors()) {
-            model.setViewName("user/signup");
+           // model.setViewName("user/signup");
+            model.addObject("view", "signup");
+            model.setViewName("index");
         } else {
             userService.saveUser(user);
             model.addObject("msg", "User has been registered successfully!");
             model.addObject("user", new User());
 
-            model.setViewName("user/signup");
+                model.addObject("userName", "0");
+
+
+            //model.setViewName("user/signup");
+            model.addObject("view", "signup");
+            model.setViewName("index");
         }
 
         return model;
@@ -101,11 +114,21 @@ public class UserController {
         User user = userService.findUserByEmail(auth.getName());
         List<Rent> rent = rentRepository.findAll();
         System.out.println(rent.size()+"___ rennt size");
-        if(rent.size()>0){
-            model.addObject("rent",rent);
-        }else{
-            model.addObject("rent",0);
+
+        if (rent.size() > 0) {
+            model.addObject("rent", rent);
+        } else {
+            Rent dummy= new Rent();
+            java.sql.Date now = java.sql.Date.valueOf(LocalDate.now());
+            dummy.setCreationDate(now);
+            dummy.setReturnDate(now);
+            dummy.setIsloan(false);
+            dummy.setIdtopo(0);
+            dummy.setIduser(0);
+            rent.add(dummy);
+            model.addObject("rent", rent);
         }
+
         List<Publication> publication = publicationService.findByIdUser(user.getId());
 
         List<Topo> topos = topoService.findAllTopo();
@@ -114,10 +137,6 @@ public class UserController {
         List<Way> ways = wayRepository.findAll();
 
         Commentaire commentaires = new Commentaire();
-
-
-
-
         model.addObject("UserId",user.getId());
 
         model.addObject("publication",publication);
@@ -127,16 +146,12 @@ public class UserController {
         model.addObject("way",ways);
         model.addObject("commentaire",commentaires);
         model.addObject("userName", user.getName() + " " + user.getLastname());
-        model.setViewName("home/loggedHome");
+        //model.setViewName("home/loggedHome");
+        model.addObject("view", "loggedhome");
+        model.setViewName("index");
         return model;
     }
 
-    @RequestMapping(value = {"/logout"}, method = RequestMethod.POST)
-    public String logout(  )
-    {
-
-        return "redirect:home";
-    }
 
     @RequestMapping(value= {"/access_denied"}, method=RequestMethod.GET)
     public ModelAndView accessDenied() {

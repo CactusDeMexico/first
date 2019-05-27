@@ -24,4 +24,7 @@ public class Commentaire {
 
     @Column(name = "idpublication")
     private int idpublication;
+
+    @Column(name = "hiddencom")
+    private boolean isHidden;
 }

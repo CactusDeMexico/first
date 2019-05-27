@@ -10,7 +10,7 @@ import java.util.Date;
 import static javax.persistence.TemporalType.DATE;
 
 @Entity
-@Table(name ="rent")
+@Table(name = "rent")
 @Getter
 @Setter
 public class Rent {
@@ -21,16 +21,20 @@ public class Rent {
     @Column(name = "isloan")
     private boolean isloan;
 
-
-    @DateTimeFormat(pattern="YYYY-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "borrowingdate")
-    private Date creationdate;
-    @DateTimeFormat(pattern="YYYY-MM-dd")
+    private Date creationDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "return")
     private Date returnDate;
 
     @Column(name = "iduser")
     private int iduser;
 
+    @Column(name = "isborrow")
+    private boolean isBorrow;
 
+    @Column(name = "isseen")
+    private boolean isSeen;
 }

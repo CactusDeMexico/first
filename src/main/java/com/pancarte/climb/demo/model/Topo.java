@@ -19,6 +19,9 @@ public class Topo {
     @Column(name = "lieu")
     private String lieuTopo;
 
+    @Column(name = "hiddentopo")
+    private boolean isHidden;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "proprietaire", joinColumns = @JoinColumn(name = "idtopo"), inverseJoinColumns = @JoinColumn(name = "iduser"))
     private Set<User> users;

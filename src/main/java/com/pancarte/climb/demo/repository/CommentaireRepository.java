@@ -1,7 +1,7 @@
 package com.pancarte.climb.demo.repository;
 
 import com.pancarte.climb.demo.model.Commentaire;
-import com.pancarte.climb.demo.model.Publication;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

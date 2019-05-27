@@ -1,8 +1,6 @@
 package com.pancarte.climb.demo.repository;
 
 import com.pancarte.climb.demo.model.Proprietaire;
-import com.pancarte.climb.demo.model.Rent;
-import com.pancarte.climb.demo.model.Spot;
 import com.pancarte.climb.demo.model.Topo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,9 +25,12 @@ public interface TopoRepository extends JpaRepository<Topo, Long> {
 
     @Query(value = "SELECT * FROM topo u WHERE u.idtopo =:idtopo",nativeQuery = true)
     List<Topo> findById(@Param("idtopo") int idtopo);
+    @Query(value = "SELECT * FROM topo u WHERE u.idtopo =:idtopo",nativeQuery = true)
+    Topo findOneById(@Param("idtopo") int idtopo);
 
     @Query(value = "SELECT * FROM proprietaire u WHERE u.idtopo =:idtopo",nativeQuery = true)
     List<Proprietaire> findOwner(@Param("idtopo") int idtopo);
+
 
 
 //UPDATE  rent u SET description =:description where description=:oldDescription
