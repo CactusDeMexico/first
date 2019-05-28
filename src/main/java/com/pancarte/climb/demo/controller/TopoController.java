@@ -156,16 +156,17 @@ public class TopoController {
         User user = userService.findUserByEmail(auth.getName());
         List<Rent> rents = rentRepository.findAll();
         List<Proprietaire> proprietaires = proprietaireRepository.findAll();
-        int nb=0;
+        int nb = 0;
         for (Rent rent : rents) {
-        if(!rent.isBorrow()){
-            nb++;
+            if (!rent.isBorrow()) {
+                nb++;
+            }
         }
-        } model.addObject("location", false);
-        if(nb==rents.size()){
+        model.addObject("location", false);
+        if (nb == rents.size()) {
             model.addObject("location", true);
         }
-        System.out.println(nb+" "+rents.size());
+        System.out.println(nb + " " + rents.size());
 
         model.addObject("userName", user.getName() + " " + user.getLastname());
         List<Topo> topo = topoService.findAllTopo();
@@ -472,12 +473,28 @@ public class TopoController {
 
         String lastSpotDescription = "";
         String lastSpotName = "";
-        for (Topo topo : topos) {
-            for (Spot spot : spots) {
-                if (topo.getIdtopo() == spot.getIdtopo()) {
-                    lastSpotName = spot.getNomSpot();
-                    lastSpotDescription = spot.getDescription();
-                }
+        String lastSpotlink = "";
+        String secondSpotDescription = "";
+        String secondSpotName = "";
+        String secondSpotlink = "";
+        String thridSpotDescription = "";
+        String thridSpotName = "";
+        String thridSpotlink = "";
+        for (Spot spot : spots) {
+            if (spots.indexOf(spot) == spots.size() - 1) {
+                lastSpotName = spot.getNomSpot();
+                lastSpotDescription = spot.getDescription();
+                lastSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 2) {
+                secondSpotName = spot.getNomSpot();
+                secondSpotDescription = spot.getDescription();
+                secondSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 3) {
+                thridSpotName = spot.getNomSpot();
+                thridSpotDescription = spot.getDescription();
+                thridSpotlink = spot.getLienSpot();
             }
         }
         System.out.println(cap);
@@ -506,7 +523,13 @@ public class TopoController {
             model.addObject("userName", "0");
         }
         spots = spotService.findAllSpot();
-
+        model.addObject("lastSpotlink", lastSpotlink);
+        model.addObject("secondSpotName", secondSpotName);
+        model.addObject("secondSpotDescription", secondSpotDescription);
+        model.addObject("secondSpotlink", secondSpotlink);
+        model.addObject("thridSpotName", thridSpotName);
+        model.addObject("thridSpotDescription", thridSpotDescription);
+        model.addObject("thridSpotlink", thridSpotlink);
         model.addObject("spot", spots);
         model.addObject("topo", topos);
         model.addObject("lastSpotName", lastSpotName);
@@ -523,6 +546,44 @@ public class TopoController {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
+        List<Spot> spots = spotService.findAllSpot();
+        String lastSpotDescription = "";
+        String lastSpotName = "";
+        String lastSpotlink = "";
+        String secondSpotDescription = "";
+        String secondSpotName = "";
+        String secondSpotlink = "";
+        String thridSpotDescription = "";
+        String thridSpotName = "";
+        String thridSpotlink = "";
+
+
+        for (Spot spot : spots) {
+            if (spots.indexOf(spot) == spots.size() - 1) {
+                lastSpotName = spot.getNomSpot();
+                lastSpotDescription = spot.getDescription();
+                lastSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 2) {
+                secondSpotName = spot.getNomSpot();
+                secondSpotDescription = spot.getDescription();
+                secondSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 3) {
+                thridSpotName = spot.getNomSpot();
+                thridSpotDescription = spot.getDescription();
+                thridSpotlink = spot.getLienSpot();
+            }
+        }
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
+        model.addObject("lastSpotlink", lastSpotlink);
+        model.addObject("secondSpotName", secondSpotName);
+        model.addObject("secondSpotDescription", secondSpotDescription);
+        model.addObject("secondSpotlink", secondSpotlink);
+        model.addObject("thridSpotName", thridSpotName);
+        model.addObject("thridSpotDescription", thridSpotDescription);
+        model.addObject("thridSpotlink", thridSpotlink);
         List<Topo> topos = topoService.findById(idtopo);
         List<Proprietaire> Proprietaire = proprietaireRepository.findAllPro();
         List<User> userL = userService.findAll();
@@ -553,7 +614,7 @@ public class TopoController {
             model.addObject("rent", rent);
         }
         List<Secteur> secteurs = secteurRepository.findByIdSpot(idspot);
-        List<Spot> spots = spotService.findByIdtopo(idtopo);
+        spots = spotService.findByIdtopo(idtopo);
         List<Way> ways = wayRepository.findAll();
         int idPub = 0;
 
@@ -666,34 +727,55 @@ public class TopoController {
         ModelAndView model = new ModelAndView();
         List<Topo> topos = topoService.findAllTopo();
         List<Spot> spots = spotService.findAllSpot();
-        String lastSpotDescription = "";
-        String lastSpotName = "";
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
+        String lastSpotDescription = "";
+        String lastSpotName = "";
+        String lastSpotlink = "";
+        String secondSpotDescription = "";
+        String secondSpotName = "";
+        String secondSpotlink = "";
+        String thridSpotDescription = "";
+        String thridSpotName = "";
+        String thridSpotlink = "";
 
-        for (Topo topo : topos) {
-            for (Spot spot : spots) {
-                if (topo.getIdtopo() == spot.getIdtopo()) {
-                    lastSpotName = spot.getNomSpot();
-                    lastSpotDescription = spot.getDescription();
-                }
+
+        for (Spot spot : spots) {
+            if (spots.indexOf(spot) == spots.size() - 1) {
+                lastSpotName = spot.getNomSpot();
+                lastSpotDescription = spot.getDescription();
+                lastSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 2) {
+                secondSpotName = spot.getNomSpot();
+                secondSpotDescription = spot.getDescription();
+                secondSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 3) {
+                thridSpotName = spot.getNomSpot();
+                thridSpotDescription = spot.getDescription();
+                thridSpotlink = spot.getLienSpot();
             }
         }
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
+        model.addObject("lastSpotlink", lastSpotlink);
+        model.addObject("secondSpotName", secondSpotName);
+        model.addObject("secondSpotDescription", secondSpotDescription);
+        model.addObject("secondSpotlink", secondSpotlink);
+        model.addObject("thridSpotName", thridSpotName);
+        model.addObject("thridSpotDescription", thridSpotDescription);
+        model.addObject("thridSpotlink", thridSpotlink);
         if (!auth.getName().equals("anonymousUser")) {
             model.addObject("userName", user.getName() + " " + user.getLastname());
         } else {
             model.addObject("userName", "0");
         }
 
-        System.out.println(auth.isAuthenticated());
-        System.out.println(auth.getName().isEmpty());
-        System.out.println(auth.getName());
-
         model.addObject("spot", spots);
         model.addObject("view", "home");
         model.addObject("topo", topos);
-        model.addObject("lastSpotName", lastSpotName);
-        model.addObject("lastSpotDescription", lastSpotDescription);
+
 
         //model.setViewName("home/home");
         model.setViewName("index");

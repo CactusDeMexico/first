@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository("topoRepository")
 @Transactional
-public interface TopoRepository extends JpaRepository<Topo, Long> {
+public interface TopoRepository extends JpaRepository<Topo, Integer> {
 
 
     @Query(value = "SELECT * FROM topo u WHERE u.idtopo > 0",nativeQuery = true)
@@ -30,6 +30,8 @@ public interface TopoRepository extends JpaRepository<Topo, Long> {
 
     @Query(value = "SELECT * FROM proprietaire u WHERE u.idtopo =:idtopo",nativeQuery = true)
     List<Proprietaire> findOwner(@Param("idtopo") int idtopo);
+    @Query(value = "SELECT * FROM proprietaire ",nativeQuery = true)
+    List<Proprietaire> findOwners();
 
 
 
