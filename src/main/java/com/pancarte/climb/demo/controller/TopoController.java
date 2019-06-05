@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,9 +41,11 @@ public class TopoController {
     private final SpotRepository spotRepository;
     private final CommentaireRepository commentaireRepository;
     private final RentRepository rentRepository;
+    private final PublicationRepository publicationRepository;
 
     @Autowired
-    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
+    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository,@Qualifier("publicationRepository") PublicationRepository publicationRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
+        this.publicationRepository = publicationRepository;
         this.topoService = topoService;
         this.topoRepository = topoRepository;
         this.spotService = spotService;
@@ -219,6 +222,10 @@ public class TopoController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         Spot upSpot = spotRepository.getOne(spot.getIdspot());
+        Date now = Date.valueOf(LocalDate.now());
+        Publication publication = publicationService.findAllById(upSpot.getIdpublication());
+        publication.setUpdatedate(now);
+        publicationRepository.save(publication);
         spot.setLienSpot(upSpot.getLienSpot());
         spotRepository.save(spot);
         return "redirect:/loggedhome";
@@ -268,6 +275,10 @@ public class TopoController {
                 pathSector = Paths.get(s + numb + imgSpot.getOriginalFilename());
             }
         }
+        Date now = Date.valueOf(LocalDate.now());
+        Publication publication = publicationService.findAllById(spot.getIdpublication());
+        publication.setUpdatedate(now);
+        publicationRepository.save(publication);
 
         Files.write(pathSpot, bytesSpot);
         Files.write(pathSector, bytesSecteur);
@@ -300,6 +311,10 @@ public class TopoController {
         System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
 
         Secteur upsec = secteurRepository.getOne(secteur.getIdsecteur());
+        Date now = Date.valueOf(LocalDate.now());
+        Publication publication = publicationService.findAllById(upsec.getIdpublication());
+        publication.setUpdatedate(now);
+        publicationRepository.save(publication);
         secteur.setIdpublication(upsec.getIdpublication());
         secteur.setIdspot(upsec.getIdspot());
         secteur.setLien(upsec.getLien());
@@ -455,9 +470,17 @@ public class TopoController {
     }
 
     @RequestMapping(value = {"/com"}, method = RequestMethod.POST)
-    public String comment(Commentaire commentaire) {
+    public String comment(Commentaire commentaire, @RequestParam("idtopo") int idtopo, @RequestParam("idspot") int idspot ,@RequestParam("idpublication") int idpublication,@RequestParam("iduser") int iduser) {
+
+        commentaire.setIdpublication(idpublication);
+        commentaire.setIduser(iduser);
+        System.out.println(commentaire.getIdpublication()+"WWWW"+commentaire.getIduser());
         topoService.saveCommentaire(commentaire);
-        return "redirect:home";
+
+
+                String redirect="redirect:/publication/?idtopo="+idtopo+"&idspot="+idspot;
+        System.out.println(redirect);
+        return redirect;
     }
 
     @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
@@ -468,32 +491,7 @@ public class TopoController {
         List<Topo> topos = topoService.findAllTopo();
         String cap = search.substring(0, 1).toUpperCase() + search.substring(1);
 
-        String lastSpotDescription = "";
-        String lastSpotName = "";
-        String lastSpotlink = "";
-        String secondSpotDescription = "";
-        String secondSpotName = "";
-        String secondSpotlink = "";
-        String thridSpotDescription = "";
-        String thridSpotName = "";
-        String thridSpotlink = "";
-        for (Spot spot : spots) {
-            if (spots.indexOf(spot) == spots.size() - 1) {
-                lastSpotName = spot.getNomSpot();
-                lastSpotDescription = spot.getDescription();
-                lastSpotlink = spot.getLienSpot();
-            }
-            if (spots.indexOf(spot) == spots.size() - 2) {
-                secondSpotName = spot.getNomSpot();
-                secondSpotDescription = spot.getDescription();
-                secondSpotlink = spot.getLienSpot();
-            }
-            if (spots.indexOf(spot) == spots.size() - 3) {
-                thridSpotName = spot.getNomSpot();
-                thridSpotDescription = spot.getDescription();
-                thridSpotlink = spot.getLienSpot();
-            }
-        }
+
         System.out.println(cap);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
@@ -520,18 +518,12 @@ public class TopoController {
             model.addObject("userName", "0");
         }
         spots = spotService.findAllSpot();
-        model.addObject("lastSpotlink", lastSpotlink);
-        model.addObject("secondSpotName", secondSpotName);
-        model.addObject("secondSpotDescription", secondSpotDescription);
-        model.addObject("secondSpotlink", secondSpotlink);
-        model.addObject("thridSpotName", thridSpotName);
-        model.addObject("thridSpotDescription", thridSpotDescription);
-        model.addObject("thridSpotlink", thridSpotlink);
+
         model.addObject("spot", spots);
         model.addObject("topo", topos);
-        model.addObject("lastSpotName", lastSpotName);
-        model.addObject("lastSpotDescription", lastSpotDescription);
-        model.addObject("view", "home");
+        model.addObject("search", search);
+
+        model.addObject("view", "search");
         //model.setViewName("home/home");
         model.setViewName("index");
 
@@ -591,6 +583,7 @@ public class TopoController {
             model.addObject("UserId", user.getId());
         } else {
             model.addObject("userName", "0");
+            model.addObject("UserId",0);
         }
         List<Rent> rent = rentRepository.findAll();
         String rentContain = "";
@@ -628,7 +621,8 @@ public class TopoController {
         List<Commentaire> comment = commentaireRepository.findAllByIdPublication(idPub);
         Publication pub = publicationService.findAllById(idPub);
         System.out.println(pub.getIdpublication());
-
+        model.addObject("idtopo", idtopo);
+        model.addObject("idspot", idspot);
         model.addObject("user", userL);
         model.addObject("view", "publication");
         model.addObject("proprietaire", Proprietaire);

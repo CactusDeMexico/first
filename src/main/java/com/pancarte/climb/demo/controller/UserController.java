@@ -15,10 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -36,7 +38,7 @@ public class UserController {
     private final RentRepository rentRepository;
 
     @Autowired
-    public UserController(@Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository,@Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, UserService userService, TopoService topoService, SpotService spotService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("rentRepository") RentRepository rentRepository) {
+    public UserController(@Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository, @Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, UserService userService, TopoService topoService, SpotService spotService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("rentRepository") RentRepository rentRepository) {
         this.commentaireRepository = commentaireRepository;
         this.topoRepository = topoRepository;
         this.userService = userService;
@@ -100,6 +102,13 @@ public class UserController {
         return model;
     }
 
+    @RequestMapping(value = {"/logged"}, method = RequestMethod.GET)
+    public String logged() {
+
+        System.out.println("XXXX");
+        return "redirect:/loggedhome";
+    }
+
     @RequestMapping(value = {"/loggedhome"}, method = RequestMethod.GET)
     public ModelAndView loggedHome() {
         ModelAndView model = new ModelAndView();
@@ -128,18 +137,91 @@ public class UserController {
         List<Secteur> secteurs = secteurRepository.findAll();
         List<Spot> spots = spotService.findAllSpot();
         List<Way> ways = wayRepository.findAll();
-        int nb=0;
-        List<Proprietaire> proprietaires =proprietaireRepository.findAllPro();
+        int nb = 0;
+        List<Proprietaire> proprietaires = proprietaireRepository.findAllPro();
         for (Proprietaire proprietaire : proprietaires) {
-            if(proprietaire.getIduser()!=user.getId()){
+            if (proprietaire.getIduser() != user.getId()) {
                 nb++;
             }
-
         }
         model.addObject("owner", false);
-        if(nb==proprietaires.size()){
+        if (nb == proprietaires.size()) {
             model.addObject("owner", true);
         }
+        String lastSpotDescription = "";
+        String lastSpotName = "";
+        String lastSpotlink = "";
+        String secondSpotDescription = "";
+        String secondSpotName = "";
+        String secondSpotlink = "";
+        String thridSpotDescription = "";
+        String thridSpotName = "";
+        String thridSpotlink = "";
+
+        for (Spot spot : spots) {
+            if (spots.indexOf(spot) == spots.size() - 1) {
+                lastSpotName = spot.getNomSpot();
+                lastSpotDescription = spot.getDescription();
+                lastSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 2) {
+                secondSpotName = spot.getNomSpot();
+                secondSpotDescription = spot.getDescription();
+                secondSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 3) {
+                thridSpotName = spot.getNomSpot();
+                thridSpotDescription = spot.getDescription();
+                thridSpotlink = spot.getLienSpot();
+            }
+        }
+        String Topo = "";
+        String topoSelec = "";
+        Spot selectedTopo = new Spot();
+        List<Spot> topoList = new ArrayList();
+        for (Topo topo : topos) {
+            if (!topo.isHidden()) {
+                selectedTopo = new Spot();
+                for (Spot spot : spots) {
+                    if (topo.getIdtopo() == spot.getIdtopo()) {
+                        Topo = topo.getLieuTopo();
+                        if (selectedTopo.getNomSpot()==null) {
+                            selectedTopo = spots.get(spots.indexOf(spot));
+                        }
+
+                        if (spots.indexOf(spot) + 1 < spots.size()) {
+                            Spot test = spots.get(spots.indexOf(spot) + 1);
+                            Spot test2 = spots.get(spots.indexOf(spot) + 1);
+
+                            if (test.getIdtopo() != (spot.getIdtopo())) {
+                                System.out.println("le topo " + topo.getLieuTopo() + " le nom du spot" + spot.getNomSpot());
+                            }
+                        }
+                    }
+                }
+                topoSelec += Topo + " ";
+                topoList.add(selectedTopo);
+            }
+        }
+        for (Spot spot : topoList) {
+            System.out.println("new");
+            System.out.println(spot.getIdtopo());
+            System.out.println(spot.getNomSpot());
+
+        }
+
+        System.out.println("SELEC " + topoSelec);
+
+        model.addObject("selectedTopo", topoList);
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
+        model.addObject("lastSpotlink", lastSpotlink);
+        model.addObject("secondSpotName", secondSpotName);
+        model.addObject("secondSpotDescription", secondSpotDescription);
+        model.addObject("secondSpotlink", secondSpotlink);
+        model.addObject("thridSpotName", thridSpotName);
+        model.addObject("thridSpotDescription", thridSpotDescription);
+        model.addObject("thridSpotlink", thridSpotlink);
         Commentaire commentaires = new Commentaire();
         model.addObject("UserId", user.getId());
 
@@ -150,6 +232,7 @@ public class UserController {
         model.addObject("way", ways);
         model.addObject("commentaire", commentaires);
         model.addObject("userName", user.getName() + " " + user.getLastname());
+
         //model.setViewName("home/loggedHome");
         model.addObject("view", "loggedhome");
         model.setViewName("index");
