@@ -81,7 +81,7 @@ public class UserController {
         User userExists = userService.findUserByEmail(user.getEmail());
 
         if (userExists != null) {
-            bindingResult.rejectValue("email", "error.user", "This email already exists!");
+            bindingResult.rejectValue("email", "error.user", "L'email existe déja");
         }
         if (bindingResult.hasErrors()) {
             // model.setViewName("user/signup");
@@ -89,14 +89,15 @@ public class UserController {
             model.setViewName("index");
         } else {
             userService.saveUser(user);
-            model.addObject("msg", "User has been registered successfully!");
+            model.addObject("msg", "L'utilisateur à été enregistré");
             model.addObject("user", new User());
 
             model.addObject("userName", "0");
 
             //model.setViewName("user/signup");
-            model.addObject("view", "signup");
+            model.addObject("view", "login");
             model.setViewName("index");
+
         }
 
         return model;

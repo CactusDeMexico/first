@@ -18,13 +18,13 @@
 
             </ul>
             <form class="form-inline my-2 my-lg-0" th:action="@{/search}" role="form" method="POST">
-                <a class="nav-link" th:href="@{/login}"><b class="text-muted">Connection</b> </a>
+                <a class="nav-link text-muted font-weight-bold" th:href="@{/login}">Connection </a>
                 <a class="nav-link text-muted font-weight-bold" th:href="@{/signup}">Inscription</a>
-                <span class="sr-only">Inscription</span>
+
                 <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search" name="search"
                        aria-label="Search">
 
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Recherche</button>
             </form>
 
         </div>
@@ -32,32 +32,27 @@
         <td th:if="${!userName.equals('0')}">
             <a class="navbar-brand" th:href="@{/home}">Climb</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                    aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarsExampleDefault2" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse text-white-50" id="navbarsExampleDefault">
+            <div class="collapse navbar-collapse text-white-50" id="navbarsExampleDefault2">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" th:href="@{/home}">Home <span class="sr-only">(current)</span></a>
-                    </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01"
-                           data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">Menu</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdown01">
-                            <a class="dropdown-item" href="insertPublication">Ajouter un topo</a>
-                            <a class="dropdown-item" href="/loggedhome">Liste topo</a>
-                            <a class="dropdown-item" href="borrowed">Vos location</a>
-                        </div>
                     </li>
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/insertPublication}">Ajouter un topo </a>
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/loggedhome}">Liste topo </a>
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/borrowed}">Vos locations </a>
+
+
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
 
                     <a class="nav-link text-muted font-weight-bold" th:href="@{/loggedhome}"> <span th:utext="${userName}"></span></a>
-
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/logout}">Déconnexion </a>
                     <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Recherche</button>
                 </form>
             </div>
         </td>
