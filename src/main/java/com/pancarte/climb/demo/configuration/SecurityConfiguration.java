@@ -81,12 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .and().exceptionHandling().accessDeniedPage("/access_denied");
     }
 
- //todo:   button connection/ publication
 
-
-// TODO: changer menu retirer drop down
-
-    //todo: inscription topo icone
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl db = new JdbcTokenRepositoryImpl();
