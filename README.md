@@ -5,7 +5,7 @@ sur [_OpenClassrooms_](https://www.openclassrooms.com).
 
 
 ## MPD
-![](script/mpd.png?raw=true)
+![](script/mpd.PNG?raw=true)
 
 
 ### Technologies
