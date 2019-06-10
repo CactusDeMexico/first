@@ -487,7 +487,7 @@ public class TopoController {
         topos.addAll(topoService.findByLieu(cap));
         spots.addAll(spotService.findByName(cap));
         for (Spot spot : spots) {
-            for (Topo topo : topos) {
+            for (Topo ignored : topos) {
                 if ((topos.toArray().toString()).contains(Integer.toString(spot.getIdtopo()))) {
                     topos.addAll(topoService.findById(spot.getIdtopo()));
                 }
