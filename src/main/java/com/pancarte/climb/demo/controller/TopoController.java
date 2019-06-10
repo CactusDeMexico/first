@@ -14,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -135,11 +134,11 @@ public class TopoController {
     }
 
     @RequestMapping(value = {"/borrow"}, method = RequestMethod.POST)
-    public String borrowIt(@RequestParam("idtopo") int idtopo, Rent rent) {
+    public String borrowIt(@RequestParam("idtopo") int idtopo) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        rent = rentRepository.getOne(idtopo);
+        Rent rent = rentRepository.getOne(idtopo);
         rent.setIsloan(true);
         rent.setIduser(user.getId());
         rent.setIdtopo(idtopo);
@@ -417,11 +416,11 @@ public class TopoController {
     }
 
     @RequestMapping(value = {"/unrent"}, method = RequestMethod.GET)
-    public String unrentIt(@RequestParam("idtopo") int idtopo, Rent rent) {
+    public String unrentIt(@RequestParam("idtopo") int idtopo) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
 
-        rent = rentRepository.getOne(idtopo);
+        Rent rent = rentRepository.getOne(idtopo);
         if (rent.isIsloan() && rent.isBorrow()) {
             rent.setSeen(false);
             rent.setIsloan(false);
@@ -471,23 +470,20 @@ public class TopoController {
 
         topoService.saveCommentaire(commentaire);
 
-        String redirect = "redirect:/publication/?idtopo=" + idtopo + "&idspot=" + idspot;
-
-        return redirect;
+        return "redirect:/publication/?idtopo=" + idtopo + "&idspot=" + idspot;
     }
 
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
     public ModelAndView searchIt(@RequestParam("search") String search) {
         ModelAndView model = new ModelAndView();
 
-        List<Spot> spots = spotService.findAllSpot();
-        List<Topo> topos = topoService.findAllTopo();
+
         String cap = search.substring(0, 1).toUpperCase() + search.substring(1);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        spots = spotService.findByName(search);
-        topos = topoService.findByLieu(search);
+        List<Spot>  spots = spotService.findByName(search);
+        List<Topo>  topos = topoService.findByLieu(search);
         topos.addAll(topoService.findByLieu(cap));
         spots.addAll(spotService.findByName(cap));
         for (Spot spot : spots) {
@@ -520,9 +516,7 @@ public class TopoController {
     public String search(String search) {
         System.out.println(search);
 
-        String redirect = "redirect:/search/?search=" + search;
-
-        return redirect;
+        return "redirect:/search/?search=" + search;
     }
 
     @RequestMapping(value = {"/publication/"}, method = RequestMethod.GET)
@@ -823,6 +817,15 @@ public class TopoController {
 
         //model.setViewName("home/home");
         model.setViewName("index");
+        return model;
+    }
+    @RequestMapping(value = {"/header"}, method = RequestMethod.GET)
+    public ModelAndView header() {
+        ModelAndView model = new ModelAndView();
+        model.addObject("userName", "0");
+
+
+        model.setViewName("fragment/header");
         return model;
     }
 }

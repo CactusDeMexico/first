@@ -19,34 +19,7 @@
     <link rel="stylesheet" href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.7.4.min.css">
       <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
 
-    <style type="text/css">/* Chart.js */
-    @-webkit-keyframes chartjs-render-animation {
-        from {
-            opacity: 0.99
-        }
-        to {
-            opacity: 1
-        }
-    }
 
-    @keyframes chartjs-render-animation {
-        from {
-            opacity: 0.99
-        }
-        to {
-            opacity: 1
-        }
-    }
-
-    .chartjs-render-monitor {
-        -webkit-animation: chartjs-render-animation 0.001s;
-        animation: chartjs-render-animation 0.001s;
-    }
-
-
-    </style>
-    <!-- Custom styles for this template -->
-    <!--  <link href="../../static/jumbotron.css" rel="stylesheet"> -->
 </head>
 
 <body>
@@ -68,14 +41,14 @@
                 </div>
             </div>
             <div class="carousel-item carousel2" style="height: 100%;">
-                <img th:src="@{/img/__${secondSpotlink}__}" height="100%" width="100%" class="d-block h-s" alt="..." >
+                <img alt="..." th:src="@{/img/__${secondSpotlink}__}" height="100%" width="100%" class="d-block h-s"  >
                 <div class="carousel-caption d-none d-md-block">
                     <h5 th:text="${secondSpotName}"></h5>
                     <p th:text="${secondSpotDescription}"></p>
                 </div>
             </div>
             <div class="carousel-item carousel2" style="height: 100%;">
-                <img th:src="@{/img/__${thridSpotlink}__}" height="100%" width="100%" class="d-block w-100" alt="...">
+                <img alt="" th:src="@{/img/__${thridSpotlink}__}" height="100%" width="100%" class="d-block w-100">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 th:text="${thridSpotName}"></h5>
                     <p th:text="${thridSpotDescription}"></p>
