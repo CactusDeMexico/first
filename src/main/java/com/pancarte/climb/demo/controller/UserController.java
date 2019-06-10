@@ -106,7 +106,7 @@ public class UserController {
     @RequestMapping(value = {"/logged"}, method = RequestMethod.GET)
     public String logged() {
 
-        System.out.println("XXXX");
+
         return "redirect:/loggedhome";
     }
 
@@ -116,7 +116,6 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         List<Rent> rent = rentRepository.findAll();
-        System.out.println(rent.size() + "___ rennt size");
 
         if (rent.size() > 0) {
             model.addObject("rent", rent);
@@ -195,7 +194,7 @@ public class UserController {
                             Spot test2 = spots.get(spots.indexOf(spot) + 1);
 
                             if (test.getIdtopo() != (spot.getIdtopo())) {
-                                System.out.println("le topo " + topo.getLieuTopo() + " le nom du spot" + spot.getNomSpot());
+
                             }
                         }
                     }
@@ -204,14 +203,9 @@ public class UserController {
                 topoList.add(selectedTopo);
             }
         }
-        for (Spot spot : topoList) {
-            System.out.println("new");
-            System.out.println(spot.getIdtopo());
-            System.out.println(spot.getNomSpot());
 
-        }
 
-        System.out.println("SELEC " + topoSelec);
+
 
         model.addObject("selectedTopo", topoList);
         model.addObject("lastSpotName", lastSpotName);

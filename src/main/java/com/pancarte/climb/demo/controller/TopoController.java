@@ -44,7 +44,7 @@ public class TopoController {
     private final PublicationRepository publicationRepository;
 
     @Autowired
-    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository,@Qualifier("publicationRepository") PublicationRepository publicationRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
+    public TopoController(TopoService topoService, @Qualifier("topoRepository") TopoRepository topoRepository, @Qualifier("publicationRepository") PublicationRepository publicationRepository, @Qualifier("spotRepository") SpotRepository spotRepository, SpotService spotService, UserService userService, WayService wayService, PublicationService publicationService, SecteurRepository secteurRepository, @Qualifier("wayRepository") WayRepository wayRepository, @Qualifier("commentaireRepository") CommentaireRepository commentaireRepository, @Qualifier("rentRepository") RentRepository rentRepository, @Qualifier("proprietaireRepository") ProprietaireRepository proprietaireRepository) {
         this.publicationRepository = publicationRepository;
         this.topoService = topoService;
         this.topoRepository = topoRepository;
@@ -65,8 +65,6 @@ public class TopoController {
         ModelAndView model = new ModelAndView();
         Rent rent = new Rent();
         User user = new User();
-        System.out.println(user.getEmail());
-        System.out.println(user.getId());
         Publication pub = new Publication();
         Topo topo = new Topo();
         Spot spot = new Spot();
@@ -74,7 +72,7 @@ public class TopoController {
         List<Way> way = wayRepository.findAll();
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
+
         List<Topo> topos = topoService.findAllTopo();
         String search = "";
         model.addObject("search", search);
@@ -166,7 +164,6 @@ public class TopoController {
         if (nb == rents.size()) {
             model.addObject("location", true);
         }
-        System.out.println(nb + " " + rents.size());
 
         model.addObject("userName", user.getName() + " " + user.getLastname());
         List<Topo> topo = topoService.findAllTopo();
@@ -264,7 +261,7 @@ public class TopoController {
 
         while (pathSpot.toFile().exists() || pathSector.toFile().exists() || pathSector == pathSpot) {
             numb = random.nextInt(10);
-            System.out.println();
+
             if (pathSpot.toFile().exists()) {
                 pathSpot = Paths.get(s + numb + imgSpot.getOriginalFilename());
             }
@@ -308,7 +305,6 @@ public class TopoController {
 
     @RequestMapping(value = {"/updateSecteur"}, method = RequestMethod.POST)
     public String updatedSecteur(Secteur secteur) {
-        System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
 
         Secteur upsec = secteurRepository.getOne(secteur.getIdsecteur());
         Date now = Date.valueOf(LocalDate.now());
@@ -340,7 +336,6 @@ public class TopoController {
 
     @RequestMapping(value = {"/addSecteur"}, method = RequestMethod.POST)
     public String addedSecteur(@RequestParam("fileSecteur") MultipartFile imgSecteur, Secteur secteur, Way way, BindingResult bindingResult) throws Exception {
-        System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
 
         bindingResult.getTarget();
         Path currentRelativePath = Paths.get("");
@@ -352,7 +347,7 @@ public class TopoController {
         Path pathSector = Paths.get(s + imgSecteur.getOriginalFilename());
         while (pathSector.toFile().exists()) {
             numb = random.nextInt(10);
-            System.out.println();
+
 
             if (pathSector.toFile().exists()) {
                 pathSector = Paths.get(s + numb + imgSecteur.getOriginalFilename());
@@ -383,7 +378,6 @@ public class TopoController {
 
     @RequestMapping(value = {"/updateVoie"}, method = RequestMethod.POST)
     public String updatedVoie(Way way) {
-        System.out.println("VOIE " + way.getIdsecteur() + way.getNomWay() + way.isEquipees() + way.getRelai() + way.getCotation() + way.getIdvoie());
 
         wayRepository.save(way);
         return "redirect:/loggedhome";
@@ -455,7 +449,7 @@ public class TopoController {
         Topo topo = topoService.findOneById(idtopo);
 
         topo.setHidden(true);
-        System.out.println("je suis la");
+
         if (rent.isBorrow() && rent.isIsloan()) {
 
             rent.setIsloan(false);
@@ -470,29 +464,26 @@ public class TopoController {
     }
 
     @RequestMapping(value = {"/com"}, method = RequestMethod.POST)
-    public String comment(Commentaire commentaire, @RequestParam("idtopo") int idtopo, @RequestParam("idspot") int idspot ,@RequestParam("idpublication") int idpublication,@RequestParam("iduser") int iduser) {
+    public String comment(Commentaire commentaire, @RequestParam("idtopo") int idtopo, @RequestParam("idspot") int idspot, @RequestParam("idpublication") int idpublication, @RequestParam("iduser") int iduser) {
 
         commentaire.setIdpublication(idpublication);
         commentaire.setIduser(iduser);
-        System.out.println(commentaire.getIdpublication()+"WWWW"+commentaire.getIduser());
+
         topoService.saveCommentaire(commentaire);
 
+        String redirect = "redirect:/publication/?idtopo=" + idtopo + "&idspot=" + idspot;
 
-                String redirect="redirect:/publication/?idtopo="+idtopo+"&idspot="+idspot;
-        System.out.println(redirect);
         return redirect;
     }
-
-    @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
-    public ModelAndView search(String search) {
+    @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
+    public ModelAndView searchIt(@RequestParam("search") String search) {
         ModelAndView model = new ModelAndView();
-        System.out.println(search + " la recherche ");
+
         List<Spot> spots = spotService.findAllSpot();
         List<Topo> topos = topoService.findAllTopo();
         String cap = search.substring(0, 1).toUpperCase() + search.substring(1);
 
 
-        System.out.println(cap);
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         spots = spotService.findByName(search);
@@ -500,11 +491,6 @@ public class TopoController {
         topos.addAll(topoService.findByLieu(cap));
         spots.addAll(spotService.findByName(cap));
         for (Spot spot : spots) {
-
-            System.out.println(" le topo " + spot.getNomSpot());
-            if (!topos.containsAll(topoService.findById(spot.getIdtopo()))) {
-                //topos.addAll(topoService.findById(spot.getIdtopo()));
-            }
             for (Topo topo : topos) {
                 if ((topos.toArray().toString()).contains(Integer.toString(spot.getIdtopo()))) {
                     topos.addAll(topoService.findById(spot.getIdtopo()));
@@ -529,6 +515,15 @@ public class TopoController {
 
         return model;
     }
+    @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
+    public String search(String search) {
+        System.out.println(search);
+
+        String redirect = "redirect:/search/?search=" + search ;
+
+        return redirect;
+
+    }
 
     @RequestMapping(value = {"/publication/"}, method = RequestMethod.GET)
     public ModelAndView publication(@RequestParam("idtopo") int idtopo, @RequestParam("idspot") int idspot) {
@@ -545,7 +540,6 @@ public class TopoController {
         String thridSpotDescription = "";
         String thridSpotName = "";
         String thridSpotlink = "";
-
 
         for (Spot spot : spots) {
             if (spots.indexOf(spot) == spots.size() - 1) {
@@ -576,15 +570,18 @@ public class TopoController {
         List<Topo> topos = topoService.findById(idtopo);
         List<Proprietaire> Proprietaire = proprietaireRepository.findAllPro();
         List<User> userL = userService.findAll();
-        System.out.println(" voici l'id topo " + idspot + " id spot" + idspot);
+
         if (!auth.getName().equals("anonymousUser")) {
             model.addObject("userName", user.getName() + " " + user.getLastname());
             model.addObject("userConnectedId", user.getId());
             model.addObject("UserId", user.getId());
         } else {
             model.addObject("userName", "0");
-            model.addObject("UserId",0);
+            model.addObject("UserId", 0);
         }
+        //todo:pret topo
+        //todo: get search
+        //todo: icon inscription
         List<Rent> rent = rentRepository.findAll();
         String rentContain = "";
         if (rent.size() > 0) {
@@ -607,20 +604,18 @@ public class TopoController {
         spots = spotService.findByIdtopo(idtopo);
         List<Way> ways = wayRepository.findAll();
         int idPub = 0;
-
         Commentaire commentaires = new Commentaire();
         for (Spot spot : spots) {
 
-            System.out.println(spot.getIdpublication() + " ____");
             idPub = spot.getIdpublication();
             Publication pub = publicationService.findAllById(spot.getIdpublication());
-            System.out.println(pub.getName());
+
             model.addObject("rentContain", rentContain);
         }
         // List<User> users = userService.f
         List<Commentaire> comment = commentaireRepository.findAllByIdPublication(idPub);
         Publication pub = publicationService.findAllById(idPub);
-        System.out.println(pub.getIdpublication());
+
         model.addObject("idtopo", idtopo);
         model.addObject("idspot", idspot);
         model.addObject("user", userL);
@@ -643,8 +638,7 @@ public class TopoController {
         ModelAndView model = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
-        System.out.println(user.getEmail());
-        System.out.println(user.getId());
+
         Publication pub = new Publication();
         Topo topo = new Topo();
         Spot spot = new Spot();
@@ -652,7 +646,7 @@ public class TopoController {
         Way way = new Way();
         Path currentRelativePath = Paths.get("");
         String s = currentRelativePath.toAbsolutePath().toString();
-        System.out.println("Current relative path is: " + s);
+
         List<Topo> topos = topoService.findAllTopo();
         String search = "";
         model.addObject("search", search);
@@ -672,14 +666,10 @@ public class TopoController {
 
     @RequestMapping(value = {"/insertPublication"}, method = RequestMethod.POST, headers = "content-type=multipart/*")
     public String savePublication(@RequestParam("file") MultipartFile imgSpot, @RequestParam("fileSecteur") MultipartFile imgSecteur, Publication publication, Topo topo, Spot spot, Secteur secteur, Way way) throws IOException {
-        //ModelAndView model = new ModelAndView();
-        System.out.println("test " + imgSpot.getOriginalFilename());
-        Path currentRelativePath = Paths.get("");
-        System.out.println("PATH /" + currentRelativePath.toAbsolutePath());
-        String path = "\\src\\main\\resources\\static\\img\\";
 
+        Path currentRelativePath = Paths.get("");
+        String path = "\\src\\main\\resources\\static\\img\\";
         String s = (currentRelativePath.toAbsolutePath().toString()) + path;
-        System.out.println("____________________XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         byte[] bytesSpot = imgSpot.getBytes();
         byte[] bytesSecteur = imgSecteur.getBytes();
         Random random = new Random();
@@ -689,7 +679,7 @@ public class TopoController {
 
         while (pathSpot.toFile().exists() || pathSector.toFile().exists() || pathSector == pathSpot) {
             numb = random.nextInt(10);
-            System.out.println();
+
             if (pathSpot.toFile().exists()) {
                 pathSpot = Paths.get(s + numb + imgSpot.getOriginalFilename());
             }
@@ -701,15 +691,15 @@ public class TopoController {
             }
         }
 
-        // enregistrement img
-        System.out.println(pathSpot);
+
+
         Files.write(pathSpot, bytesSpot);
         Files.write(pathSector, bytesSecteur);
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
         topoService.savePublication(publication, topo, spot, secteur, way, user.getId(), imgSpot.getOriginalFilename(), imgSecteur.getOriginalFilename());
-        // model.setViewName("home/home");
+
         return "redirect:home";
     }
 
@@ -729,7 +719,6 @@ public class TopoController {
         String thridSpotDescription = "";
         String thridSpotName = "";
         String thridSpotlink = "";
-
 
         for (Spot spot : spots) {
             if (spots.indexOf(spot) == spots.size() - 1) {
@@ -766,7 +755,6 @@ public class TopoController {
         model.addObject("spot", spots);
         model.addObject("view", "home");
         model.addObject("topo", topos);
-
 
         //model.setViewName("home/home");
         model.setViewName("index");

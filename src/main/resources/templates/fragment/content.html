@@ -337,7 +337,6 @@
                 <div th:each="proprietaires, stat : ${proprietaire}"
                      th:if="${proprietaires.getIdtopo()}==${topos.getIdtopo()}">
                     <div th:if="${proprietaires.getIduser()}==${UserId}">
-
                         <div class="row">
                             <div class="col-md-4" th:each="spots, stat : ${spot}"
                                  th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
@@ -348,7 +347,6 @@
                                         <ul class="product-flags">
                                             <div th:each="rents, stat : ${rent}">
                                                 <div th:if="${rents.getIdtopo()} == ${topos.getIdtopo()}">
-
                                                     <!-- si il y deja une location-->
                                                     <div th:if="${rents.isIsloan() ==true }">
                                                         <a th:href="@{/unrent/(idtopo=${spots.getIdtopo()})}">
@@ -367,7 +365,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div th:each="rents, stat : ${rent}"
                                                  th:if="${rents.getIduser()==0}">
                                                 <a th:href="@{/rent/(idtopo=${spots.getIdtopo()})}">
@@ -502,7 +499,10 @@
 
 
                 </div>
-                <div th:if="${UserId}==0">
+                <div th:each="proprietaires, stat : ${proprietaire}"
+                     th:if="${proprietaires.getIdtopo()}==${topos.getIdtopo()}">
+                <div
+                th:if="(${UserId}==0) or (${proprietaires.getIduser()}!=${UserId})">
                     <div class="row">
                         <div class="col-md-4" th:each="spots, stat : ${spot}"
                              th:if="${topos.getIdtopo()} == ${spots.getIdtopo()}">
@@ -601,7 +601,6 @@
                                     <td th:text="${secteurs.getNomSecteur()}"></td>
                                 </h3>
                                 <table class="table center-block">
-
                                     <thead>
                                     <tr>
                                         <th scope="col-sm-8">#</th>
@@ -629,8 +628,6 @@
                                     </tr>
                                 </table>
                             </div>
-
-
                         </div>
                         <br>
 
@@ -707,7 +704,7 @@
                 </div>
 
             </div>
-        </div>
+            </div></div>
     </main>
 </div>
 <div th:fragment="borrow">

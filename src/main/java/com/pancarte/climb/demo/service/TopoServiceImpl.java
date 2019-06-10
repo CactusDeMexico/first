@@ -99,14 +99,12 @@ public class TopoServiceImpl implements TopoService {
         Date now = Date.valueOf(LocalDate.now());
         publication.setCreationdate(now);
         publication.setUpdatedate(now);
-        System.out.println("PUBLICATION " + publication.getName() + " " + publication.getIduser() + " " + publication.getCreationdate() + " " + publication.getUpdatedate());
         publicationRepository.save(publication);
-        System.out.println("topo " + topo.getLieuTopo());
         //INSERTION TOPO ____________________________________
         User userProprio = userRepository.findById(IdUser);
         topo.setUsers(new HashSet<User>(Arrays.asList(userProprio)));
         topoRepository.save(topo);
-        //definiton de rent
+
         Rent rent = new Rent();
         rent.setSeen(true);
         rent.setBorrow(false);
@@ -121,17 +119,14 @@ public class TopoServiceImpl implements TopoService {
         spot.setIdtopo(topoRepository.selectLastIdTopo());
         spot.setIdpublication(publicationRepository.selectLastIdPublication());
         spot.setLienSpot(imgSpot);
-        System.out.println("spot " + spot.getIdtopo() + spot.getIdpublication() + spot.getNomSpot() + spot.getDescription() + spot.getLienSpot());
         spotRepository.save(spot);
 
         secteur.setLien(imgSecteur);
         secteur.setIdspot(spotRepository.selectLastIdspot());
         secteur.setIdpublication(publicationRepository.selectLastIdPublication());
-        System.out.println("SECTEUR " + secteur.getIdspot() + secteur.getIdpublication() + secteur.getNomSecteur() + secteur.getType() + secteur.getLien() + secteur.getHauteur());
         secteurRepository.save(secteur);
 
         way.setIdsecteur(secteurRepository.selectLastIdSecteur());
-        System.out.println("VOIE " + way.getIdsecteur() + way.getNomWay() + way.isEquipees() + way.getRelai() + way.getCotation());
 
         wayRepository.save(way);
 
