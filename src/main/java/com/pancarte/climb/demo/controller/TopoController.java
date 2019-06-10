@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -348,7 +349,6 @@ public class TopoController {
         while (pathSector.toFile().exists()) {
             numb = random.nextInt(10);
 
-
             if (pathSector.toFile().exists()) {
                 pathSector = Paths.get(s + numb + imgSecteur.getOriginalFilename());
             }
@@ -475,6 +475,7 @@ public class TopoController {
 
         return redirect;
     }
+
     @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
     public ModelAndView searchIt(@RequestParam("search") String search) {
         ModelAndView model = new ModelAndView();
@@ -482,7 +483,6 @@ public class TopoController {
         List<Spot> spots = spotService.findAllSpot();
         List<Topo> topos = topoService.findAllTopo();
         String cap = search.substring(0, 1).toUpperCase() + search.substring(1);
-
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findUserByEmail(auth.getName());
@@ -515,14 +515,14 @@ public class TopoController {
 
         return model;
     }
+
     @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
     public String search(String search) {
         System.out.println(search);
 
-        String redirect = "redirect:/search/?search=" + search ;
+        String redirect = "redirect:/search/?search=" + search;
 
         return redirect;
-
     }
 
     @RequestMapping(value = {"/publication/"}, method = RequestMethod.GET)
@@ -579,10 +579,7 @@ public class TopoController {
             model.addObject("userName", "0");
             model.addObject("UserId", 0);
         }
-        //todo:pret topo
-        //todo: get search
-        //todo: icon inscription
-        List<Rent> rent = rentRepository.findAll();
+              List<Rent> rent = rentRepository.findAll();
         String rentContain = "";
         if (rent.size() > 0) {
             model.addObject("rent", rent);
@@ -691,8 +688,6 @@ public class TopoController {
             }
         }
 
-
-
         Files.write(pathSpot, bytesSpot);
         Files.write(pathSector, bytesSecteur);
 
@@ -701,6 +696,76 @@ public class TopoController {
         topoService.savePublication(publication, topo, spot, secteur, way, user.getId(), imgSpot.getOriginalFilename(), imgSecteur.getOriginalFilename());
 
         return "redirect:home";
+    }
+
+    @RequestMapping(value = {"/borrowTopo"}, method = RequestMethod.GET)
+    public ModelAndView borrowTopo() {
+        ModelAndView model = new ModelAndView();
+        List<Topo> topos = topoService.findAllTopo();
+        List<Spot> spots = spotService.findAllSpot();
+        List<Topo> selectedTopo = new ArrayList();
+        List<Rent> rent = rentRepository.findAll();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        String lastSpotDescription = "";
+        String lastSpotName = "";
+        String lastSpotlink = "";
+        String secondSpotDescription = "";
+        String secondSpotName = "";
+        String secondSpotlink = "";
+        String thridSpotDescription = "";
+        String thridSpotName = "";
+        String thridSpotlink = "";
+
+        for (Spot spot : spots) {
+            if (spots.indexOf(spot) == spots.size() - 1) {
+                lastSpotName = spot.getNomSpot();
+                lastSpotDescription = spot.getDescription();
+                lastSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 2) {
+                secondSpotName = spot.getNomSpot();
+                secondSpotDescription = spot.getDescription();
+                secondSpotlink = spot.getLienSpot();
+            }
+            if (spots.indexOf(spot) == spots.size() - 3) {
+                thridSpotName = spot.getNomSpot();
+                thridSpotDescription = spot.getDescription();
+                thridSpotlink = spot.getLienSpot();
+            }
+        }
+        for (Topo topos2 : topos) {
+
+            for (Rent rents : rent) {
+                if ((rents.getIdtopo() == topos2.getIdtopo()) && rents.isIsloan() && !rents.isBorrow()) {
+                    selectedTopo.add(topos2);
+
+                }
+            }
+        }
+
+        model.addObject("lastSpotName", lastSpotName);
+        model.addObject("lastSpotDescription", lastSpotDescription);
+        model.addObject("lastSpotlink", lastSpotlink);
+        model.addObject("secondSpotName", secondSpotName);
+        model.addObject("secondSpotDescription", secondSpotDescription);
+        model.addObject("secondSpotlink", secondSpotlink);
+        model.addObject("thridSpotName", thridSpotName);
+        model.addObject("thridSpotDescription", thridSpotDescription);
+        model.addObject("thridSpotlink", thridSpotlink);
+        if (!auth.getName().equals("anonymousUser")) {
+            model.addObject("userName", user.getName() + " " + user.getLastname());
+        } else {
+            model.addObject("userName", "0");
+        }
+
+        model.addObject("spot", spots);
+        model.addObject("view", "home");
+        model.addObject("topo",selectedTopo);
+
+        //model.setViewName("home/home");
+        model.setViewName("index");
+        return model;
     }
 
     @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)

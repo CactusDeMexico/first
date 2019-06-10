@@ -61,6 +61,7 @@
             </div>
             <!--______________ FIN TOPO _____________________________-->
         </div>
+        <div th:if="${topo.size()==0}" class="alert alert-primary" role="alert"> Aucun topo disponible </div>
     </main>
 </div>
 <div th:fragment="loggedhome">
@@ -900,11 +901,7 @@
         <div class="jumbotron">
             <div class="container">
                 <h1 class="display-3">Inscription de topo </h1>
-                <p>This is a template for a simple marketing or informational website. It includes a large callout
-                    called a
-                    jumbotron and three supporting pieces of content. Use it as a starting point to create something
-                    more
-                    unique.</p>
+                <p>Inscriver votre topo</p>
             </div>
         </div>
         <div class="container">
@@ -1010,7 +1007,7 @@
                         <!--________________________INSERTION secteur nom_______________________________-->
                         <div class="row" th:object="${secteur}">
                             <div class="col-md-3 field-label-responsive">
-                                <label for="secteurName">nom du secteur</label>
+                                <label for="secteurName">Nom du secteur</label>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-danger">
@@ -1028,7 +1025,7 @@
                         <!--________________________INSERTION secteur lieu_______________________________-->
                         <div class="row" th:object="${secteur}">
                             <div class="col-md-3 field-label-responsive">
-                                <label for="LieuSecteur">lieu du secteur</label>
+                                <label for="LieuSecteur">Lieu du secteur</label>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-danger">
@@ -1056,8 +1053,8 @@
                                                 class="fas fa-mountain"></i>
                                         </div>
                                         <select class="browser-default custom-select" id="type" th:field="*{type}">
-                                            <option th:value="sportive">sportive</option>
-                                            <option th:value="traditionnelle">traditionnelle</option>
+                                            <option th:value="sportive">Sportive</option>
+                                            <option th:value="traditionnelle">Traditionnelle</option>
                                             <option th:value="Bloc">Bloc</option>
                                         </select>
                                     </div>
@@ -1140,7 +1137,7 @@
                         <!--________________________INSERTION VOIE cotation _______________________________-->
                         <div class="row" th:object="${way}">
                             <div class="col-md-3 field-label-responsive">
-                                <label for="cotation">cotation</label>
+                                <label for="cotation">Cotation</label>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group has-danger">
@@ -1213,7 +1210,7 @@
             <div class="container">
 
                 <h1 class="display-3">Connection</h1>
-                <p>Connectez vous</p>
+                <p>Connecter vous</p>
             </div>
         </div>
 

@@ -14,8 +14,9 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" th:href="@{/home}">Home <span class="sr-only">(current)</span></a>
-                </li>
 
+                </li>
+                <a class="nav-link text-muted font-weight-bold" th:href="@{/borrowTopo}">Pret de topo </a>
             </ul>
             <form class="form-inline my-2 my-lg-0" th:action="@{/search}" role="form" method="POST">
                 <a class="nav-link text-muted font-weight-bold" th:href="@{/login}">Connection </a>
@@ -41,6 +42,7 @@
                         <a class="nav-link" th:href="@{/home}">Home <span class="sr-only">(current)</span></a>
 
                     </li>
+                    <a class="nav-link text-muted font-weight-bold" th:href="@{/borrowTopo}">Pret de topo </a>
                     <a class="nav-link text-muted font-weight-bold" th:href="@{/insertPublication}">Ajouter un topo </a>
                     <a class="nav-link text-muted font-weight-bold" th:href="@{/loggedhome}">Liste topo </a>
                     <a class="nav-link text-muted font-weight-bold" th:href="@{/borrowed}">Vos locations </a>
