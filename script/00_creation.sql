@@ -183,4 +183,9 @@ create table if not exists persistent_logins
 alter table persistent_logins owner to postgres;
 
 INSERT INTO role (idrole,role) values ('1','ADMIN');
-
+alter table commentaire
+  add constraint user__commentaire___fk
+    foreign key (iduser) references user1;
+alter table commentaire
+  add constraint publication__commentaire___fk
+    foreign key (idpublication) references publication;

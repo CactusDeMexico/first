@@ -95,6 +95,7 @@
 </head>
 <body>
     <div th:replace="~{fragment/header :: header}">Header</div>
+
     <h1 th:text="${view}"></h1>
     <div th:replace="~{fragment/content :: ${view}}">Content</div>
 
